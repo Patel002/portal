@@ -1,0 +1,182 @@
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: url('/src/assets/img/37.png') no-repeat center center/cover; /* 🔹 background image */
+  font-family: 'Arial', sans-serif;
+}
+
+
+.login-card {
+border: 1px solid lightgray;
+  display: flex;
+  max-width: 900px;
+  width: 100%;
+  min-height: 700px; 
+  background: #fff;
+  border-radius: 9px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+
+.login-left-card {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+ 
+}
+
+.login-left {
+  width: 95%;
+  position: relative; /* required for overlay */
+  border-radius: 10px;
+  background-color: #EFF2F6;
+  padding: 50px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  overflow: hidden; 
+}
+
+/* background image with opacity */
+.login-left::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* background-color: #d6dadd; */
+  width: 100%;
+  height: 100%;
+  background: url('/src/assets/img/38.png') no-repeat center center/cover;
+  opacity: 0.8; /* 🔹 adjust this value (0.1 → very light, 0.5 → darker) */
+  z-index: 0;
+}
+
+/* make sure content stays above overlay */
+.login-left > * {
+  position: relative;
+  z-index: 1;
+}
+
+.login-left .content {
+  flex-grow: 1; /* ✅ keeps text at the top */
+}
+
+.login-left .bottom-img {
+  width: 100%;
+  max-width: 250px;
+  align-self: center;
+  margin-top: 20px;
+}
+
+
+.login-left h2 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.login-left p {
+  color: #6c757d;
+  margin-bottom: 20px;
+}
+
+.login-left ul {
+  list-style: none;
+  padding: 0;
+}
+
+.login-left ul li {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.login-left img {
+  margin-top: auto;
+  width: 100%;
+  max-width: 250px;
+}
+
+.login-right {
+  flex: 1;
+  padding: 60px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-logo {
+  width: 250px;
+  margin-bottom: 10px;
+}
+
+.login-right h3 {
+  margin-bottom: 5px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.login-right p {
+  margin-bottom: 30px;
+  color: #6c757d;
+}
+
+.login-right form {
+  width: 100%;
+  max-width: 350px;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-right input {
+  margin-bottom: 15px;
+  padding: 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.checkbox input {
+  margin-right: 10px;
+}
+
+.login-right button {
+  background-color: #0d6efd;
+  color: #fff;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-wrapper i {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #999;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding: 10px 10px 10px 35px; /* left padding for icon */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}

@@ -1,0 +1,22 @@
+.ClientStepForm ::selection{
+  background-color: #F93A0B !important;
+  color: #F2F5F8;
+}
+.ClientStepForm {
+  background-color: #F2F5F8;
+  font-family: 'Lato', sans-serif;
+  display: flex;
+  font-size: small;
+  justify-content: center;
+  align-items: center;
+  min-height: 96vh;
+}
+
+.ClientStepForm .wizard-navigation .nav li.active a {
+  background: #3472F7 ;
+  color: #fff;
+}
+.wide-container {
+  max-width: 1600px !important;  /* adjust as you like */
+  margin: 0 auto;     /* keep it centered */
+}

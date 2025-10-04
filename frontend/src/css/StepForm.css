@@ -1,0 +1,237 @@
+.stepForm {
+  background-color: #F2F5F8;
+  font-family: 'Lato', sans-serif;
+  display: flex;
+  font-size: small;
+  justify-content: center;
+  align-items: center;
+  min-height: 96vh;
+  
+}
+
+.stepForm ::selection{
+  background-color: #e75252 !important;
+  color: #F2F5F8;
+}
+
+.StepForm .container {
+  max-width: 500px;
+  background-color: transparent;
+}
+h3 {
+  text-align: center;
+}
+
+/* Card styling */
+.wizard-card {
+  background: #fff;
+  border-radius: 12px;
+  /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); */
+  padding: 20px;
+  position: relative;
+  max-width: 1200px;  
+  margin: auto;     
+}
+
+/* Logo */
+.wizard-header .brand-logo img {
+  height: 70px;
+}
+
+.wizard-header {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+/* Title */
+.wizard-header h3 {
+  font-size: 22px;
+  font-weight: 100;
+  color: black;
+  margin-top: 10px;
+}
+
+/* Nav pills (step tabs) */
+.wizard-navigation {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.wizard-navigation .nav {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: none;
+}
+
+.wizard-navigation .nav li {
+  flex: 1;
+  text-align: center;
+}
+
+.wizard-navigation .nav li a {
+  display: block;
+  padding: 10px 15px;
+  /* border-radius: 2px; */
+  background: #0A1744;
+  color: white;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.wizard-navigation .nav li a:hover {
+  color: white;
+  /* transform: scale(1.03); */
+}
+
+
+.wizard-navigation .nav li.active a {
+  background: #FE6C5F ;
+  color: #fff;
+}
+
+/* Moving tab (orange slider under active step) */
+/* .moving-tab {
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 25%;
+  height: 3px;
+  background: red;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+} */
+
+/* Form fields */
+.form-group label {
+  font-weight: 500;
+  color: #333;
+  font-size: 0.9rem; /* smaller font size */
+}
+
+.form-control,
+.form-select {
+  font-size: 15px; /* smaller text */
+  border-radius: 14px;
+  border: 1px solid #ddd;
+  box-shadow: none !important;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  padding: 8px 12px;
+}
+
+/* On focus */
+.form-control:focus,
+.form-select:focus {
+  border-color: #0A1744;
+  box-shadow: 0 0 0 0.15rem rgba(255, 152, 0, 0.25);
+}
+
+.form-control.valid,
+.form-select.valid {
+  border-color: #4CAF50 !important;   /* Green */
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+/* Invalid state (empty or invalid input) */
+.form-control.invalid,
+.form-select.invalid {
+  border-color:#FE6C5F !important;   /* Red */
+  box-shadow: 0 0 5px rgba(244, 67, 54, 0.5);
+}
+
+.form-check-input:checked {
+  background-color: #e75252 !important;
+  border-color: #e75252 !important;
+}
+
+
+/* Buttons */
+.stepForm .btn-primary {
+  background: #FE6C5F !important;
+  border: none;
+  border-radius: 12px;
+  padding: 8px 20px;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.btn-primary:hover {
+  background: #0A1744;
+}
+
+.progressbar li {
+  list-style-type: none;
+  flex: 1;
+  position: relative;
+  text-align: center;
+}
+
+.progressbar li::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  background: #ddd;
+  top: 15px;
+  left: -50%;
+  z-index: -1;
+}
+
+.progressbar li:first-child::before {
+  display: none;
+}
+
+.progressbar li.active::before {
+  background: #ff9800;
+}
+
+.confirmation {
+  /* padding: 2rem; */
+  background: #fff;
+  border-radius: 10px;
+  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+}
+
+.step-block {
+  margin-bottom: 1.5rem;
+}
+
+.step-block h5 {
+  margin-bottom: 0.75rem;
+  color: #FE6C5F;
+}
+
+ .step-block button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #e75252;
+  background-color: transparent;
+  border: 1px solid #e75252;
+  border-radius: 4px;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.step-block button:hover {
+  background-color: #F44336;
+  color: white;
+  text-decoration: none;
+}
+
+.step-block button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+}
+
+.step-block button .icon {
+  font-size: 1rem;
+}
+
+.card-header{
+  background-color: #FE6C5F !important;
+  color: white;
+}
