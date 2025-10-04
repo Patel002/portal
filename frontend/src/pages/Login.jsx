@@ -33,7 +33,7 @@ export default function Login() {
   e.preventDefault();
 
   try {
-    const res = await axios.post("http://localhost:7171/api/auth/login", formData, {
+    const res = await axios.post("https://portal-sddm.onrender.com/api/auth/login", formData, {
       headers: { "Content-Type": "application/json" },
     });
 
