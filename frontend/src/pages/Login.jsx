@@ -75,10 +75,10 @@ export default function Login() {
   <div className="login-card">
     <div className="login-left-card">
       <div className="login-left">
-    <h2>DHT Solutions</h2>
+    <h2>Nightingale</h2>
   <div className="content">
     <p>
-      DHT-Solutions software offers a seamless business process experience
+      Nightingale software offers a seamless business process experience
       distinguished by its ease and efficiency!
     </p>
     <ul>
