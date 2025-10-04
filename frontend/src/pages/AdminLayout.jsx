@@ -1,7 +1,7 @@
 import { Outlet, Link, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import '../css/AdminLayout.css';
-import logo from '../assets/logo-filled.png';
+import logo from '/public/assets/logo-filled.png';
 import SidebarMenu from './Sidebar';
 import axios from "axios";
 import 'admin-lte';

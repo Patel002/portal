@@ -10,7 +10,7 @@ export default function RegisterPage() {
         {/* Header */}
         <header className="header">
           <img
-            src="/src/assets/logo-wbg.png"
+            src="/public/assets/logo-wbg.png"
             alt="Nightingale Care Logo"
             className="logo"
           />
@@ -109,7 +109,7 @@ export default function RegisterPage() {
 
         {/* Background Logo */}
         <img
-          src="/src/assets/logo-filled.png"
+          src="/public/assets/logo-filled.png"
           height="375px"
           alt="Background"
           className="bg-image"

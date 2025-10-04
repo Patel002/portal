@@ -112,7 +112,7 @@ const RegisterCandidate = () => {
         <div className="card wizard-card" data-color="orange" id="wizardProfile">
           <div className="wizard-header">
             <a href="/" className="brand-logo">
-              <img src="/src/assets/complogo.png" alt="Logo" />
+              <img src="/public/assets/complogo.png" alt="Logo" />
             </a>
             <h3>
               <b>Candidate Registration</b>
