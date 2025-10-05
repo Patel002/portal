@@ -1,6 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "../css/RegisterPage.css";
+import { Link } from "react-router-dom";
 
 export default function RegisterPage() {
   return (
@@ -35,14 +36,14 @@ export default function RegisterPage() {
           </p>
 
           {/* Register Button */}
-          <a href="/candidate/candidate_registration" className="register-btn">
+          <Link to="/candidate/candidate_registration" className="register-btn">
             <div className="main btn-txt">Register now</div>
             <div className="icon">
               <b>
                 <i className="fas fa-check"></i>
               </b>
             </div>
-          </a>
+          </Link>
         </main>
 
         {/* Footer */}
