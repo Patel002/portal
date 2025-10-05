@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import useCandidateOptions from "../hooks/useCandidateOptions";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
@@ -112,7 +112,7 @@ const RegisterCandidate = () => {
         <div className="card wizard-card" data-color="orange" id="wizardProfile">
           <div className="wizard-header">
             <a href="/" className="brand-logo">
-              <img src="/assets/complogo.png" alt="Logo" />
+              <img src={import.meta.env.BASE_URL + "assets/complogo.png"} alt="Logo" />
             </a>
             <h3>
               <b>Candidate Registration</b>
