@@ -96,7 +96,7 @@ useEffect(() => {
 
     try {
       setLoading(true);
-      const res = await axios.get(`http://localhost:7171/api/address/${value}`);
+      const res = await axios.get(`https://portal-sddm.onrender.com/api/address/${value}`);
       
       setSuggestions(res.data.suggestions || []);
 
@@ -110,7 +110,7 @@ useEffect(() => {
 
    const selectAddress = async (id) => {
     try {
-      const res = await axios.get(`http://localhost:7171/api/address/get/${id}`);
+      const res = await axios.get(`https://portal-sddm.onrender.com/api/address/get/${id}`);
       const data = res.data;
 
       const fullAddress = [
