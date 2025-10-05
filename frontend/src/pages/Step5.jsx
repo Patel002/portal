@@ -3,10 +3,10 @@
 
     const Confirmation = ({ values, prevStep, goToStep, options }) => {
 
-      const successAudio = new Audio('/src/assets/success.mp3');
+      const successAudio = new Audio('/assets/success.mp3');
       successAudio.load();
 
-      const errorAudio = new Audio('/src/assets/error.mp3');
+      const errorAudio = new Audio('/assets/error.mp3');
       errorAudio.load();
 
       const advertRefOptions = {

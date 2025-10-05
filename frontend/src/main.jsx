@@ -5,6 +5,8 @@ import 'jquery';
 import 'bootstrap';
 import 'admin-lte';
 import 'admin-lte/dist/css/adminlte.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 const queryClient = new QueryClient()
 

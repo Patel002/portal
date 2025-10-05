@@ -1,18 +1,18 @@
 import { useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
-import logo from "/public/assets/complogo.png";
-import bgIllustration from "/public/assets/img/auth.png"
+import logo from "/assets/complogo.png";
+import bgIllustration from "/assets/img/auth.png"
 import showToast from '../helper/toast.js';
 import '../css/login.css'
 
 
 export default function Login() {
 
-  const successAudio = new Audio('/public/assets/success.mp3');
+  const successAudio = new Audio('/assets/success.mp3');
       successAudio.load();
 
-      const errorAudio = new Audio('/public/assets/error.mp3');
+      const errorAudio = new Audio('/assets/error.mp3');
       errorAudio.load();
 
   const [formData, setFormData] = useState({
