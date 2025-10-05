@@ -69,6 +69,8 @@ const RegisterCandidate = () => {
     clientNeeds: clientNeedsQuery.data || []
   };
 
+  console.log("options", options);
+console.log("isLoading", isLoading);
 
 
   // useEffect(() => {
