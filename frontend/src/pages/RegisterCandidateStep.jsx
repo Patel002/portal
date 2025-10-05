@@ -114,7 +114,7 @@ console.log("isLoading", isLoading);
         <div className="card wizard-card" data-color="orange" id="wizardProfile">
           <div className="wizard-header">
             <a href="/" className="brand-logo">
-              <img src={import.meta.env.BASE_URL + "assets/complogo.png"} alt="Logo" />
+              <img src={"/assets/complogo.png"} alt="Logo" />
             </a>
             <h3>
               <b>Candidate Registration</b>
