@@ -1,7 +1,10 @@
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import useCandidateOptions from "../hooks/useCandidateOptions";
 import '../css/ClientReg.css'
 import Step1 from "./components/Step1";
+import Step2 from "./components/Step2";
+import Step3 from "./components/Step3";
+import Step4 from "./components/Step4";
 
 const ClientReg = () => {
      const [step, setStep] = useState(() => {
@@ -17,6 +20,7 @@ const ClientReg = () => {
       address_list :"",
       vat_number :"",
       registration_no :"",
+      client_logo :"",
       website :"",
       monthly_cost :"",
       subscription :"",
@@ -45,27 +49,18 @@ const ClientReg = () => {
       billing_mobile :"",
       billing_email :"",
       billing_entity_address :"",
-      post_code1 :"",
-      place :"",
-      address :"",
-      type :"",
-      entity_name :"",
-      care_facility : [],
-      client_need : [],
-      facility_type_contact_name :"",
-      facility_contact_landline_no :"",
-      facility_contact_mobile_no :"",
-      facility_contact_email :"",
-      facility_lane_code :"",
-      facility_mobile_code :"",
-      shiftid :"",
-      sr_1 :"",
-      shift_pattern_1 :"",
-      shift_type_1 :"",
-      shift_start_1 :"",
-      shift_end_1 :"",
-      remarks_1: ""
+      step2_data: [],
+      shift_pattern: [],
     })
+
+    useEffect(() => {
+  console.log("Updated formData:", formData);
+}, [formData]);
+
+
+useEffect(() => {
+  localStorage.setItem("currentStep", step);
+}, [step]);
 
     const {
     careFacilityQuery,
@@ -74,13 +69,16 @@ const ClientReg = () => {
     } = useCandidateOptions();
 
     const options = {
-      careFacility: careFacilityQuery.data || [],
-      clientNeeds: clientNeedsQuery.data || []
+      care_facility: careFacilityQuery.data || [],
+      client_need: clientNeedsQuery.data || []
     }
+
+    console.log("Options:", options);
 
     const nextStep = () => setStep(step + 1);
     const prevStep = () => setStep(step - 1);
-    const goToStep = (targetStep) => setStep(targetStep)
+    // const goToStep = (targetStep) => setStep(targetStep)
+    
 
     const handleChange = (field) => (eOrValue) => {
     const value = eOrValue?.target ? eOrValue.target.value : eOrValue;
@@ -89,6 +87,15 @@ const ClientReg = () => {
       [field]: value,
     }));
   };
+
+const handleStep2Change = (newStep2Data) => {
+  setFormData((prev) => ({
+    ...prev,
+    step2_data: newStep2Data,
+  }));
+};
+
+
 
 //   const handleBlur = (input) => () => {
 //     setTouched({ ...touched, [input]: true });
@@ -102,17 +109,17 @@ const stepTitles = {
   5: "Pay Rate"
 };
 
-  const handleCheckbox = (field, value) => {
-    setFormData((prev) => {
-      const isChecked = prev[field].includes(value);
-      return {
-        ...prev,
-        [field]: isChecked
-          ? prev[field].filter((item) => item !== value)
-          : [...prev[field], value],
-      };
-    });
-  };
+  // const handleCheckbox = (field, value) => {
+  //   setFormData((prev) => {
+  //     const isChecked = prev[field].includes(value);
+  //     return {
+  //       ...prev,
+  //       [field]: isChecked
+  //         ? prev[field].filter((item) => item !== value)
+  //         : [...prev[field], value],
+  //     };
+  //   });
+  // };
 
   if (isLoading) return <h3>Loading options...</h3>;
 
@@ -122,7 +129,7 @@ const stepTitles = {
         <div className="card wizard-card" data-color="orange" id="wizardProfile">
           <div className="wizard-header">
             <a href="/" className="brand-logo">
-              <img src="/src/assets/complogo.png" alt="Logo" />
+              <img src="/assets/complogo.png" alt="Logo" />
             </a>
             <h3>{stepTitles[step]}</h3>
           </div>
@@ -141,10 +148,36 @@ const stepTitles = {
               nextStep={nextStep}
               handleChange={handleChange}
               values={formData}
-            //   touched={touched}
-            //   handleBlur={handleBlur}
             />
           )}
+           {step === 2 && (
+            <Step2
+              nextStep={nextStep}
+              prevStep={prevStep}
+              values={formData}
+              careFacility={options.care_facility}
+              clientNeeds={options.client_need}
+              handleStep2Change={handleStep2Change} 
+            />
+          )}
+           
+           {step === 3 && (
+            <Step3
+            nextStep={nextStep}
+            prevStep={prevStep}
+            handleChange={handleChange}
+            values={formData}
+            />
+           )}
+
+           {step === 4 && (
+            <Step4
+            nextStep={nextStep}
+            prevStep={prevStep}
+            handleChange={handleChange}
+            values={formData}
+            />
+           )}
         </div>
       </div>
     </div>

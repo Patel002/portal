@@ -1,0 +1,2 @@
+Shift PatternShift ,"Type(1:Fixed Shift Pattern ,2:Emergency/Adhoc Shift Pattern)",Start date,end date,remarks
+Morning Shift,1,07:00,15:00,Regular morning shift

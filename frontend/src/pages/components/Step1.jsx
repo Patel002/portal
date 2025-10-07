@@ -1,46 +1,44 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import intlTelInput  from 'intl-tel-input'
-import 'intl-tel-input/build/css/intlTelInput.css';
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 export default function Step1({ nextStep, handleChange, values }) {
+
+    const Api_base_Url = import.meta.env.VITE_API_BASE;
 
     const [parent, setParent] = useState([]);
     const [suggestions, setSuggestions] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [errors, setErrors] = useState({});
+    const [touched, setTouched] = useState({});
     const [logoPreview, setLogoPreview] = useState(null);
     const [subscriptionType, setSubscriptionType] = useState(values.subscription || "");
-    const phoneInputRef = useRef(null);
-    const landlineInputRef = useRef(null);
 
-      const validators = {
+    const validators = {
     client_organisation: (val) => val.trim().length >= 2,
     post_code: (val) => val.trim().length >= 4,
-    place: (val) => val.trim().length >= 2,
-    address_line_1: (val) => val.trim().length > 5,
-    vat_number: (val) => true, // optional
-    company_reg_number: (val) => true, // optional
-    website: (val) => !val || /^https?:\/\/[^\s$.?#].[^\s]*$/.test(val),
+    postal_address: (val) => val.trim().length >= 2,
+    address_list: (val) => val.trim().length > 5,
+    vat_number: (val) => /^[A-Za-z0-9\s-]+$/.test(val), 
+    company_reg_number: (val) => /^[A-Za-z0-9\s-]+$/.test(val), 
+    website: (val) => /^https?:\/\/[^\s$.?#].[^\s]*$/.test(val),
     subscription: (val) => !!val,
     monthly_cost: (val) => /^[0-9]+(\.[0-9]{1,2})?$/.test(val),
     monthly_payroll: (val) => subscriptionType.includes("Payroll") ? /^[0-9]+(\.[0-9]{1,2})?$/.test(val) : true,
     payroll_timesheet: (val) => subscriptionType.includes("Payroll") ? /^[0-9]+(\.[0-9]{1,2})?$/.test(val) : true,
-    candidate_name: (val) => val.trim().length >= 2,
-    position: (val) => val.trim().length >= 2,
-    email_id: (val) => /^\S+@\S+\.\S+$/.test(val),
+    contact_name: (val) => val.trim().length >= 2,
+    contact_position: (val) => val.trim().length >= 2,
+    contact_email: (val) => /^\S+@\S+\.\S+$/.test(val),
+    contact_mobile: (val) => /^[0-9]{10,15}$/.test(val.replace(/\D/g, "")),
     contact_number: (val) => /^[0-9]{10,15}$/.test(val.replace(/\D/g, "")),
-    lan_code: (val) => /^[0-9]{10,15}$/.test(val.replace(/\D/g, "")),
   };
-
-
 
     const isPayrollRequired = !["Basic Subscription", "Premium Subscription", "Premium Plus Subscription"].includes(subscriptionType);
 
     useEffect(() => {
         const fetchParent = async () => {
          try {
-             const res = await axios.get("http://localhost:7171/api/client/get_parent_entity")
+             const res = await axios.get(`${Api_base_Url}/client/get_parent_entity`)
             setParent(res.data.data || []);
             
         } catch (error) {
@@ -50,78 +48,25 @@ export default function Step1({ nextStep, handleChange, values }) {
         fetchParent();
     }, []);
 
-  const validateForm = () => {
-    let newErrors = {};
-    for (let field in validators) {
-      if (!validators[field](values[field] || "")) {
-        newErrors[field] = true;
-      }
-    }
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      nextStep();
-    }
-  };
+  e.preventDefault();
+   const isValid = Object.keys(validators).every(key => validators[key](values[key]));
+    if (isValid) nextStep();
+    else alert("Please correct the errors in the form");
+};
 
-const getClass = (field, value) => {
-    if (errors[field]) return "form-control is-invalid";
-    if (values[field] && validators[field](value)) return "form-control is-valid";
-    return "form-control";
-  };
+ const getClass = (field) => {
+  if (!values[field]) return "form-control form-control-sm";
 
-
-useEffect(() => {
-  let itiMobile, itiLandline;
-  let updateMobile, updateLandline;
-
-  if (phoneInputRef.current) {
-    itiMobile = intlTelInput(phoneInputRef.current, {
-      initialCountry: "gb",
-      separateDialCode: true,
-      utilsScript:
-        "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js",
-    });
-
-    updateMobile = () => {
-      handleChange("contact_mobile")({ target: { value: itiMobile.getNumber() } });
-    };
-
-    phoneInputRef.current.addEventListener("countrychange", updateMobile);
-    phoneInputRef.current.addEventListener("input", updateMobile);
+  if (validators[field]) {
+    return validators[field](values[field])
+      ? "form-control form-control-sm border border-success"
+      : "form-control form-control-sm border border-danger";
   }
 
-  if (landlineInputRef.current) {
-    itiLandline = intlTelInput(landlineInputRef.current, {
-      initialCountry: "gb",
-      separateDialCode: true,
-      utilsScript:
-        "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js",
-    });
-
-    updateLandline = () => {
-      handleChange("lane_code")({ target: { value: itiLandline.getNumber() } });
-    };
-
-    landlineInputRef.current.addEventListener("countrychange", updateLandline);
-    landlineInputRef.current.addEventListener("input", updateLandline);
-  }
-
-  return () => {
-    if (phoneInputRef.current && updateMobile) {
-      phoneInputRef.current.removeEventListener("countrychange", updateMobile);
-      phoneInputRef.current.removeEventListener("input", updateMobile);
-    }
-    if (landlineInputRef.current && updateLandline) {
-      landlineInputRef.current.removeEventListener("countrychange", updateLandline);
-      landlineInputRef.current.removeEventListener("input", updateLandline);
-    }
-  };
-}, [handleChange]);
+  return "form-control form-control-sm";
+};
 
 
 
@@ -137,7 +82,7 @@ useEffect(() => {
 
     try {
       setLoading(true);
-      const res = await axios.get(`http://localhost:7171/api/address/${value}`);
+      const res = await axios.get(`${Api_base_Url}/address/${value}`);
       
       setSuggestions(res.data.suggestions || []);
 
@@ -151,7 +96,7 @@ useEffect(() => {
 
    const selectAddress = async (id) => {
     try {
-      const res = await axios.get(`http://localhost:7171/api/address/get/${id}`);
+      const res = await axios.get(`${Api_base_Url}/address/get/${id}`);
       const data = res.data;
 
       const fullAddress = [
@@ -169,11 +114,11 @@ useEffect(() => {
       // setPlace(data.town_or_city);
 
 
-      handleChange("address_line_1")({ target: { value: fullAddress } });
+      handleChange("address_list")({ target: { value: fullAddress } });
       handleChange("post_code")({ target: { value: data.postcode } });
-      handleChange("place")({ target: { value: data.town_or_city } });
+      handleChange("postal_address")({ target: { value: data.town_or_city } });
 
-     setTouched((prev) => ({ ...prev, address_line_1: true, place: true }));
+     setTouched((prev) => ({ ...prev, address_list: true, postal_address: true }));
 
 
       setSuggestions([]);
@@ -190,11 +135,10 @@ useEffect(() => {
     }
   };
 
-
   
 return (
   <div className="card-body">
-   <form>
+   <form onSubmit={handleSubmit}>
     <div className="row">
       <div className="mb-1 col-md-3 col-sm-12">
         <label className="form-label">
@@ -202,7 +146,7 @@ return (
         </label>
         <input
           type="text"
-          className={"form-control"}
+          className={`form-control form-control-sm ${getClass("client_organisation", values.client_organisation || "")}`}
           value={values.client_organisation || ""}
           onChange={handleChange("client_organisation")}
           placeholder="Enter Client Organisation"
@@ -213,7 +157,7 @@ return (
             <label className="form-label">Parent Entity (if any)</label>
             <select
               name="parent_entity"
-              className="form-control"
+              className={`form-control form-control-sm ${getClass("parent_entity", values.parent_entity || "")}`}
               value={values.parent_entity || ""}
               onChange={handleChange("parent_entity")}
             >
@@ -232,13 +176,13 @@ return (
         </label>
         <input
           type="text"
-          className={getClass("post_code", values.post_code || "")}
+          className={`form-control form-control-sm ${getClass("post_code", values.post_code || "")}`}
           value={values.post_code || ""}
           onChange={(e) => {
             handleChange("post_code")(e); 
             fetchAddresses(e.target.value);
           }}
-        //   onBlur={() => setTouched({ ...touched, post_code: true })}
+          onBlur={() => setTouched({ ...touched, post_code: true })}
           placeholder="Post code"
           required
         />
@@ -269,11 +213,11 @@ return (
         <label className="form-label">Place <i className="text-danger">*</i></label>
         <input
         type="text"
-        className={getClass("place", values.place || "")}
-        value={values.place || ""}
-        onChange={handleChange("place")}
-        // onBlur={() => setTouched({ ...touched, place: true })}
-        placeholder="Place"
+        className={`form-control form-control-sm  ${getClass("postal_address", values.postal_address || "")}`}
+        value={values.postal_address || ""}
+        onChange={handleChange("postal_address")}
+        onBlur={() => setTouched({ ...prev,...touched, postal_address: true })}
+        placeholder="postal_address"
         required
       />
       </div>
@@ -284,10 +228,10 @@ return (
         </label>
        <input
       type="text"
-      className={getClass("address_line_1", values.address_line_1 || "")}
-      value={values.address_line_1 || ""}
-      onChange={handleChange("address_line_1")}
-    //   onBlur={() => setTouched({ ...touched, address_line_1: true })}
+      className={`form-control form-control-sm  ${getClass("address_list", values.address_list || "")}`}
+      value={values.address_list || ""}
+      onChange={handleChange("address_list")}
+      onBlur={() => setTouched({ ...touched, address_list: true })}
       placeholder="Full address"
       required
     />
@@ -299,9 +243,10 @@ return (
                 <label className="form-label small">VAT Number</label>
                 <input
                 type="text"
-                className="form-control form-control-sm"
+                className={`form-control form-control-sm  ${getClass("vat_number", values.vat_number || "")}`}
                 value={values.vat_number || ""}
                 onChange={handleChange("vat_number")}
+                onBlur={() => setTouched({ ...touched, vat_number: true })}
                 placeholder="Enter VAT Number"
                 />
             </div>
@@ -311,9 +256,10 @@ return (
                 <label className="form-label small">Company Registration Number</label>
                 <input
                 type="text"
-                className="form-control form-control-sm"
+                className= {`form-control form-control-sm  ${getClass("company_reg_number", values.company_reg_number || "")}`}
                 value={values.company_reg_number || ""}
                 onChange={handleChange("company_reg_number")}
+                onBlur={() => setTouched({ ...touched, company_reg_number: true })}
                 placeholder="Enter Registration Number"
                 />
             </div>
@@ -323,7 +269,7 @@ return (
                 <label className="form-label small">Website</label>
                 <input
                 type="url"
-                className="form-control form-control-sm"
+                className={`form-control form-control-sm  ${getClass("website", values.website || "")}`}
                 value={values.website || ""}
                 onChange={handleChange("website")}
                 placeholder="https://example.com"
@@ -337,7 +283,7 @@ return (
                 {/* File input takes full width minus preview space */}
                 <input
                     type="file"
-                    className="form-control form-control-sm"
+                    className={`form-control form-control-sm  ${getClass("client_logo", values.client_logo || "")}`}
                     accept="image/*"
                     onChange={handleLogoChange}
                     style={{ flex: 1, minWidth: 0 }} 
@@ -401,7 +347,7 @@ return (
                 <input
                   type="text"
                   step="0.01"
-                  className="form-control form-control-sm"
+                  className={`form-control form-control-sm  ${getClass("monthly_cost", values.monthly_cost || "")}`}
                   placeholder="Enter Monthly Cost (e.g. 99.99)"
                   onInput={(e) =>
                     (e.target.value = e.target.value.replace(/[^0-9.]/g, '').replace(/(\..{2})./g, '$1'))
@@ -419,7 +365,7 @@ return (
                 <label className="form-label small">Monthly Payroll Subscription Cost <i className="text-danger">*</i></label>
                 <input
                   type="text"
-                  className="form-control form-control-sm"
+                  className={`form-control form-control-sm  ${getClass("monthly_payroll", values.monthly_payroll || "")}`}
                   placeholder="Enter Monthly Payroll Subscription Cost"
                   value={values.monthly_payroll || ""}
                   onChange={handleChange("monthly_payroll")}
@@ -431,7 +377,7 @@ return (
                 <label className="form-label small">Payroll Cost Per Timesheet <i className="text-danger">*</i></label>
                 <input
                   type="text"
-                  className="form-control form-control-sm"
+                  className={`form-control form-control-sm  ${getClass("payroll_timesheet", values.payroll_timesheet || "")}`}
                   placeholder="Payroll Cost Per Timesheet"
                   value={values.payroll_timesheet || ""}
                   onChange={handleChange("payroll_timesheet")}
@@ -492,10 +438,9 @@ return (
     </label>
     <input
       type="text"
-      className={`form-control form-control-sm ${getClass("candidate_name", values.candidate_name || "")}`}
-      value={values.candidate_name || ""}
-      onChange={handleChange("candidate_name")}
-      onBlur={() => setTouched({ ...touched, candidate_name: true })}
+      className={`form-control form-control-sm ${getClass("contact_name", values.contact_name || "")}`}
+      value={values.contact_name || ""}
+      onChange={handleChange("contact_name")}
       placeholder="Enter your name"
       required
     />
@@ -507,32 +452,33 @@ return (
     </label>
     <input
       type="text"
-      className={`form-control form-control-sm ${getClass("position", values.position || "")}`}
-      value={values.position || ""}
-      onChange={handleChange("position")}
-      onBlur={() => setTouched({ ...touched, position: true })}
+      className={`form-control form-control-sm ${getClass("contact_position", values.contact_position || "")}`}
+      value={values.contact_position || ""}
+      onChange={handleChange("contact_position")}
       placeholder="Enter Official Position or Designation"
       required
     />
   </div>
 
-  <div className="mb-3 col-md-4 col-sm-12">
-    <label className="form-label d-block">
-      Landline Number <i className="text-danger">*</i>
-    </label>
-    <input
-      type="tel"
-      className={`form-control form-control-sm ${getClass("lan_code", values.lan_code || "")}`}
-      ref={landlineInputRef}
-      value={values.lan_code || ""}
-      onChange={handleChange("lan_code")}
-      onBlur={() => setTouched({ ...touched, lan_code: true })}
-      pattern="[0-9]{10,15}"
-      placeholder="Enter Landline Number"
-      required
-      title="Please enter a valid mobile number (10 to 15 digits)."
-    />
-  </div>
+<div className="mb-3 col-md-4 col-sm-12">
+  <label className="form-label d-block">
+    Landline Number <i className="text-danger">*</i>
+  </label>
+   <PhoneInput
+              country={"gb"}
+              value={values.contact_number || ""}
+              onChange={(phone, countryData) =>{ 
+                handleChange("contact_number")({ target: { value: phone } })
+                handleChange("lane_code")({ target: { value: countryData.dialCode }})
+              }}
+              inputProps={{
+                name: "contact_number",
+                required: true,
+                className: getClass("contact_number", values.contact_number || ""),
+              }}
+            />
+</div>
+
 </div>
 
 <div className="row">
@@ -542,34 +488,34 @@ return (
         </label>
         <input
           type="email"
-          className={`form-control form-control-sm ${getClass("email_id", values.email_id || "")}`}
-          value={values.email_id || ""}
-          onChange={handleChange("email_id")}
-          onBlur={() => setTouched({ ...touched, email_id: true })}
+          className={`form-control form-control-sm ${getClass("contact_email", values.contact_email || "")}`}
+          value={values.contact_email || ""}
+          onChange={handleChange("contact_email")}
           placeholder="Enter your email"
           required
         />
       </div>
 
       <div className="mb-3 col-md-4 col-sm-8">
-    <label className="form-label d-block">
-      Mobile <i className="text-danger">*</i>
-    </label>
-    <input
-      type="tel"
-      className={`form-control form-control-sm ${getClass("contact_number", values.mobile_number || "")}`}
-      ref={phoneInputRef}
-      value={values.contact_number || ""}
-      onChange={handleChange("contact_number")}
-      onBlur={() => setTouched({ ...touched, contact_number: true })}
-      pattern="[0-9]{10,15}"
-      placeholder="Enter Mobile Number"
-      required
-      title="Please enter a valid mobile number (10 to 15 digits)."
-    />
-  </div>
-    </div>
+  <label className="form-label d-block">
+    Mobile <i className="text-danger">*</i>
+  </label>
+      <PhoneInput
+          country={"gb"}
+          value={values.contact_mobile || ""}
+          onChange={(phone, countryData) => {
+            handleChange("contact_mobile")({ target: { value: phone }})
+            handleChange("mobile_code")({ target: { value: countryData.dialCode }})
+        }}
+          inputProps={{
+            name: "contact_mobile",
+            required: true,
+            className: getClass("contact_mobile", values.contact_mobile || ""),
+          }}
+        />
+</div>
 
+    </div>
 
       </div>
        <div className="d-flex justify-content-end">

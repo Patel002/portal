@@ -45,29 +45,11 @@ const registerClient = async(req, res) => {
       billing_mobile,
       billing_email,
       billing_entity_address,
-      post_code1,
-      place,
-      address,
-      type,
-      entity_name,
-      care_facility,
-      client_need,
-      facility_type_contact_name,
-      facility_contact_landline_no,
-      facility_contact_mobile_no,
-      facility_contact_email,
-      facility_lane_code,
-      facility_mobile_code,
-      shiftid,
-      sr_1,
-      shift_pattern_1,
-      shift_type_1,
-      shift_start_1,
-      shift_end_1,
-      remarks_1
+      step2_data,
+      shift_pattern,
     } = req.body
 
-    let clientLogo = req.files?.client_logo ? req.files.client_logo[0].filename : "";
+    let client_logo = req.files?.client_logo ? req.files.client_logo[0].filename : "";
     let uploadFile = req.files?.upload ? req.files.upload[0].filename : "";
 
     let client;
@@ -82,7 +64,7 @@ const registerClient = async(req, res) => {
         vat_number,
         company_reg: registration_no,
         website,
-        client_logo: clientLogo,
+        client_logo,
         subscription_type: subscription,
         monthly_cost,
         monthly_payroll,
@@ -108,7 +90,7 @@ const registerClient = async(req, res) => {
         vat_number,
         company_reg: registration_no,
         website,
-        client_logo: clientLogo,
+        client_logo,
         subscription_type: subscription,
         monthly_cost,
         monthly_payroll,
@@ -145,68 +127,71 @@ const registerClient = async(req, res) => {
 
     const insertedIds = [];
     
-    if (Array.isArray(post_code1)) {
-      for (let i = 0; i < post_code1.length; i++) {
+    if (Array.isArray(step2_data)) {
+      for (let i = 0; i < step2_data.length; i++) {
+        const item = step2_data[i];
         let needs = Array.isArray(client_need?.[i]) ? client_need[i].join(",") : client_need?.[i] || "";
         const data = {
-          client_id: client.id,
-          post_code: post_code1[i],
-          place: place[i],
-          address: address[i],
-          address_type: type[i],
-          entity_name: entity_name[i],
-          care_type: care_facility[i],
-          client_need: needs,
-          facility_contact_name: facility_type_contact_name?.[i] || "",
-          landline_code: facility_lane_code?.[i] || "",
-          mobile_code: facility_mobile_code?.[i] || "",
-          landline_no: facility_contact_landline_no?.[i] || "",
-          mobile_no: facility_contact_mobile_no?.[i] || "",
-          email: facility_contact_email?.[i] || "",
-          created_on: new Date(),
-          created_by: req.user?.id || null
-        };
+      client_id: client.id,
+      post_code: item.post_code,
+      place: item.place,
+      address: item.address,
+      address_type: item.type,
+      entity_name: item.entity_name,
+      care_type: item.care_facility,
+      client_need: needs,
+      facility_contact_name: item.facility_contact_name || "",
+      landline_code: item.facility_lane_code || "",
+      mobile_code: item.facility_mobile_code || "",
+      landline_no: item.facility_contact_landline_no || "",
+      mobile_no: item.facility_contact_mobile_no || "",
+      email: item.facility_contact_email || "",
+      created_on: new Date(),
+      created_by: req.user?.id || null
+    };
 
-        let step2;
-        if (req.body.data_id?.[i]) {
-          await ClientRegistration.update(data, {
-            where: { id: req.body.data_id[i], client_id: client.id }
-          });
-        } else {
-          step2 = await ClientRegistration.create(data);
-          insertedIds.push(step2.id);
-        }
-      }
+    if (item.data_id) {
+      await ClientRegistration.update(data, {
+        where: { id: item.data_id, client_id: client.id }
+      });
+    } else {
+      const step2 = await ClientRegistration.create(data);
+      insertedIds.push(step2.id);
     }
-    if (Array.isArray(shift_pattern_1)) {
-      for (let j = 0; j < shift_pattern_1.length; j++) {
-        await shift_patterns.update({
-          sr: sr_1[j],
-          shift_pattern: shift_pattern_1[j],
-          shift_type: shift_type_1[j],
-          shift_start: shift_start_1[j],
-          shift_end: shift_end_1[j],
-          remarks: remarks_1[j],
-          updated_by: req.user?.id || null,
-          updated_on: new Date()
-        }, { where: { id: shiftid[j] } });
-      }
+  }
+}
+    if (Array.isArray(req.body.shift_pattern)) {
+  for (const shift of req.body.shift_pattern) {
+    const data = {
+      sr: shift.sr_no,
+      shift_pattern: shift.shift_pattern,
+      shift_type: shift.shift_type,
+      shift_start: shift.shift_start,
+      shift_end: shift.shift_end,
+      remarks: shift.remarks,
+      updated_by: req.user?.id || null,
+      updated_on: new Date()
+    };
+
+    if (shift.shiftid) {
+      await shift_patterns.update(data, {
+        where: { id: shift.shiftid }
+      });
+    } else {
+      await shift_patterns.create({
+        ...data,
+        client_id: client.id,
+        created_by: req.user?.id || null,
+        created_on: new Date()
+      });
     }
-
-    return res.json({
-      message: "Successfully Inserted/Updated",
-      insertedId: client.id,
-      finance_entity_address,
-      billing_entity_address,
-      insertedIds
-    });
-
-        
+  }
+}
     } catch (error) {
-    console.error(err);
-    return res.status(500).json(new ApiResponse(500, {}, error.message));
+        return res.status(500).json(new ApiResponse(500, {}, error.message));
     }
 }
+
 
 
 const getParentEntity = async(req, res) => {

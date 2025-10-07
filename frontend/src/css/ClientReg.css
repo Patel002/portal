@@ -12,11 +12,59 @@
   min-height: 96vh;
 }
 
+
+.ClientStepForm .wizard-navigation .nav li a {
+  display: block;
+  padding: 8px 15px;
+  /* border-radius: 0.9px !important; */
+  background: #0A1744;
+  color: white;
+  font-weight: 500;
+  transition: 0.3s;
+  border-right: 1px solid #ffffff33;
+}
+
+.ClientStepForm .wizard-navigation {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.ClientStepForm .wizard-navigation .nav {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: none;
+}
+
+.ClientStepForm .wizard-navigation .nav li {
+  flex: 1;
+  text-align: center;
+  margin-right: 8px;
+
+}
+
+
 .ClientStepForm .wizard-navigation .nav li.active a {
   background: #3472F7 ;
   color: #fff;
 }
-.wide-container {
-  max-width: 1600px !important;  /* adjust as you like */
-  margin: 0 auto;     /* keep it centered */
+.ClientStepForm .wide-container {
+  max-width: 1600px !important;  
+  margin: 0 auto;   
+}
+
+.select__multi-value {
+  background-color: #007bff !important;
+  color: white;
+}
+.select__multi-value__label {
+  color: white;
+}
+
+.ClientStepForm .btn-primary {
+  background: #FE6C5F !important;
+  border: none;
+  border-radius: 12px;
+  padding: 8px 20px;
+  font-weight: 500;
+  transition: 0.3s;
 }
