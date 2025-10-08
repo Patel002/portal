@@ -5,6 +5,9 @@ import $ from "jquery";
 import showToast from "../helper/toast.js";
 
 const Menu = () => {
+
+    const Api_base_Url = import.meta.env.VITE_API_BASE;
+
     const [menu, setMenu] = useState([]);
     const [error, setError] = useState('');
     const [editData, setEditData] = useState(null);
@@ -31,7 +34,7 @@ const Menu = () => {
 
     const fetchMenu = async () => {
         try {
-            const res = await axios.get('http://localhost:7171/api/menu/menus');
+            const res = await axios.get(`${Api_base_Url}/menu/menus`);
             setMenu(res.data.menu || []);
             setError('');
         } catch (error) {
@@ -66,7 +69,7 @@ const Menu = () => {
                 }
             }
 
-            await axios.patch(`http://localhost:7171/api/menu/update-menu/${editData.id}`, updatedFields);
+            await axios.patch(`${Api_base_Url}/menu/update-menu/${editData.id}`, updatedFields);
             setEditData(null);
             fetchMenu();
             showToast("success", 'Menu updated successfully');
@@ -79,7 +82,7 @@ const Menu = () => {
     const handleDelete = async (id) => {
         if (!window.confirm("Are you sure you want to delete this menu?")) return;
         try {
-            await axios.delete(`http://localhost:7171/api/menu/delete-menu/${id}`);
+            await axios.delete(`${Api_base_Url}/menu/delete-menu/${id}`);
             fetchMenu();
             setError('');
         } catch (error) {
@@ -100,7 +103,7 @@ const Menu = () => {
         e.preventDefault();
 
         try {
-            const res = await axios.post('http://localhost:7171/api/menu/create-menu', formData, {
+            const res = await axios.post(`${Api_base_Url}/menu/create-menu`, formData, {
                 headers: {
                     'Content-Type': 'application/json',
                 }

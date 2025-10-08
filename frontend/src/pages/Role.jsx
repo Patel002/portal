@@ -7,9 +7,10 @@ import showToast from "../helper/toast.js";
 
 const Role = () => {
 
-  const successAudio = new Audio('/src/assets/success.mp3');
-      successAudio.load();
+    const Api_base_Url = import.meta.env.VITE_API_BASE;
 
+    const successAudio = new Audio('/src/assets/success.mp3');
+    successAudio.load();
 
     const [roles, setRoles] = useState([]);
     const [roleName, setRoleName] = useState('');
@@ -41,7 +42,7 @@ const Role = () => {
             return;
         }
         try {
-            const response = await axios.patch(`http://localhost:7171/api/role/update?id=${editData.id}`, { roleName });
+            const response = await axios.patch(`${Api_base_Url}/role/update?id=${editData.id}`, { roleName });
             setRoleName('');
             setEditData(null);
             setError('');
@@ -60,7 +61,7 @@ const Role = () => {
 
     const fetchRoles = async () => {
         try {
-            const res = await axios.get(`http://localhost:7171/api/role/list-role`);
+            const res = await axios.get(`${Api_base_Url}/role/list-role`);
             setRoles(res.data.roles);
             setError('');
 
@@ -86,7 +87,7 @@ const Role = () => {
         }
 
         try {
-            const res = await axios.post(`http://localhost:7171/api/role/`, { roleName },
+            const res = await axios.post(`${Api_base_Url}/role/`, { roleName },
                 {
                     headers: {
                         'Content-Type': 'application/json',

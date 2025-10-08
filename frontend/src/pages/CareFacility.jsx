@@ -7,6 +7,8 @@ import showToast from "../helper/toast.js";
 
 const CareFacility = () => {
 
+  const Api_base_Url = import.meta.env.VITE_API_BASE;
+
   const successAudio = new Audio('/src/assets/success.mp3');
       successAudio.load();
 
@@ -47,7 +49,7 @@ const CareFacility = () => {
        }).then(async (result) => {
         if (result.isConfirmed) {
         try {
-            await axios.delete(`http://localhost:7171/api/care-facility/delete-facility?id=${id}`);
+            await axios.delete(`${Api_base_Url}/care-facility/delete-facility?id=${id}`);
             fetchNeeds();
             setError('');
         } catch (error) {
@@ -65,7 +67,7 @@ const CareFacility = () => {
             return;
         }
         try {
-            const response = await axios.patch(`http://localhost:7171/api/care-facility/update-facility?id=${editData.id}`, { careFacilityName });
+            const response = await axios.patch(`${Api_base_Url}/care-facility/update-facility?id=${editData.id}`, { careFacilityName });
             setCareFacilityName('');
             setEditData(null);
             setError('');
@@ -84,7 +86,7 @@ const CareFacility = () => {
 
     const fetchNeeds = async () => {
         try {
-            const res = await axios.get(`http://localhost:7171/api/care-facility/care-facility`);
+            const res = await axios.get(`${Api_base_Url}/care-facility/care-facility`);
             setCareFacilityNeeds(res.data.data);
             setError('');
 
@@ -110,7 +112,7 @@ const CareFacility = () => {
 
             const adminId = sessionStorage.getItem('creater');
 
-            const res = await axios.post(`http://localhost:7171/api/care-facility/add-needs/`, { careFacilityName, created_by: adminId },
+            const res = await axios.post(`${Api_base_Url}/care-facility/add-needs/`, { careFacilityName, created_by: adminId },
                 {
                     headers: {
                         'Content-Type': 'application/json',

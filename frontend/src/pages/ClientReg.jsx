@@ -1,18 +1,27 @@
 import { useState, useEffect } from "react";
 import useCandidateOptions from "../hooks/useCandidateOptions";
+import axios from "axios";
 import '../css/ClientReg.css'
+import showToast from "../helper/toast";
 import Step1 from "./components/Step1";
 import Step2 from "./components/Step2";
 import Step3 from "./components/Step3";
 import Step4 from "./components/Step4";
+import Step5 from "./components/Step5";
+import LoaderScreen from "./components/Loader";
 
 const ClientReg = () => {
-     const [step, setStep] = useState(() => {
-    return parseInt(localStorage.getItem("currentStep")) || 1;
-  });
+
+  const successAudio = new Audio('/assets/success.mp3');
+  const errorAudio = new Audio('/assets/error.mp3');
+
+  const Api_base_Url = import.meta.env.VITE_API_BASE;
+
+
+     const [step, setStep] = useState(1);
 
     const [formData, setFormData] = useState({
-      candidate_id :"",
+      client_id :"",
       client_organisation :"",
       parent_entity :"",
       post_code :"",
@@ -51,6 +60,7 @@ const ClientReg = () => {
       billing_entity_address :"",
       step2_data: [],
       shift_pattern: [],
+      payrate: [],
     })
 
     useEffect(() => {
@@ -58,22 +68,24 @@ const ClientReg = () => {
 }, [formData]);
 
 
-useEffect(() => {
-  localStorage.setItem("currentStep", step);
-}, [step]);
+// useEffect(() => {
+//   localStorage.setItem("currentStep", step);
+// }, [step]);
 
     const {
     careFacilityQuery,
     clientNeedsQuery,
+    jobTitleQuery,
     isLoading,
     } = useCandidateOptions();
 
     const options = {
       care_facility: careFacilityQuery.data || [],
-      client_need: clientNeedsQuery.data || []
+      client_need: clientNeedsQuery.data || [],
+      job_title: jobTitleQuery.data || [],
     }
 
-    console.log("Options:", options);
+    // console.log("Options:", options);
 
     const nextStep = () => setStep(step + 1);
     const prevStep = () => setStep(step - 1);
@@ -109,19 +121,75 @@ const stepTitles = {
   5: "Pay Rate"
 };
 
-  // const handleCheckbox = (field, value) => {
-  //   setFormData((prev) => {
-  //     const isChecked = prev[field].includes(value);
-  //     return {
-  //       ...prev,
-  //       [field]: isChecked
-  //         ? prev[field].filter((item) => item !== value)
-  //         : [...prev[field], value],
-  //     };
-  //   });
-  // };
+const token = sessionStorage.getItem("token");
+// console.log("Token:", token);
+  const submitForm= async () => {
+    try {
+      const response = await axios.post(`${Api_base_Url}/client/save-client`, formData,{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      console.log('Form submitted successfully:', response.data);
+       if (response.status === 200 || response.status === 201) {
+        showToast("success","Client Registered Successfully");
+        successAudio.play();
+        setFormData({
+        candidate_id :"",
+        client_organisation :"",
+        parent_entity :"",
+        post_code :"",
+        postal_address :"",
+        address_list :"",
+        vat_number :"",
+        registration_no :"",
+        client_logo :"",
+        website :"",
+        monthly_cost :"",
+        subscription :"",
+        monthly_payroll :"",
+        payroll_timesheet :"",
+        no_payroll :"",
+        contact_name :"",
+        contact_position :"",
+        contact_email :"",
+        contact_number :"",
+        lane_code :"",
+        contact_mobile :"",
+        mobile_code :"",
+        finance_name :"",
+        finance_position :"",
+        finance_number :"",
+        finance_mobile_code :"",
+        finance_mobile :"",
+        finance_email :"",
+        finance_entity_address :"",
+        finance_credit_limit :"",
+        billing_name :"",
+        billing_position :"",
+        billing_number :"",
+        billing_mobile_code :"",
+        billing_mobile :"",
+        billing_email :"",
+        billing_entity_address :"",
+        step2_data: [],
+        shift_pattern: [],
+        payrate: [],
+        });
+        setStep(1);
+        localStorage.removeItem("currentStep");
+        
+       }
+    } catch (error) {
+      showToast("error","Error in Client Registration");
+      errorAudio.play();
+      console.error('Error submitting form:', error);
+    }
 
-  if (isLoading) return <h3>Loading options...</h3>;
+  }
+
+  if (isLoading) return <LoaderScreen message="Loading client options..." />;
+
 
   return (
     <div className="ClientStepForm">
@@ -176,6 +244,17 @@ const stepTitles = {
             prevStep={prevStep}
             handleChange={handleChange}
             values={formData}
+            />
+           )}
+
+           {step === 5 && (
+            <Step5
+            // nextStep={nextStep}
+            prevStep={prevStep}
+            jobTitle={options.job_title}
+            handleChange={handleChange}
+            values={formData}
+            submitForm={submitForm}
             />
            )}
         </div>

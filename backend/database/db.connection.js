@@ -1,11 +1,11 @@
 import { Sequelize } from "sequelize";
 
 const sequelize = new Sequelize(
-    'recruit_portal',
-    'mech_dht',
-    '2lPIac7ddOpfapJH',
+    'dhtservices_nightingale',
+    'root',
+    '',
     {
-        host: '103.250.153.83',
+        host: 'localhost',
         dialect: 'mysql',
         logging: false,
         timezone: '+05:30'

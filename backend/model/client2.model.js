@@ -39,6 +39,12 @@ const ClientRegistration = sequelize.define('client_register2', {
     created_on: DataTypes.DATE,
     created_by: DataTypes.STRING,
     updated_on: DataTypes.DATE,
+    deleted_on: DataTypes.DATE,
+    deleted: {
+        type: DataTypes.ENUM("Y", "N"),
+        allowNull: false,
+        defaultValue: "N"
+    }
 
 },{
     tableName: 'client_register_step2',

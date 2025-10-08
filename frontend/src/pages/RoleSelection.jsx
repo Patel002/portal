@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const RoleSelection = () => {
+
+    const Api_base_Url = import.meta.env.VITE_API_BASE;
+
     const [roles, setRoles] = useState([]);
     const [selectedRole, setSelectedRole] = useState("");
     const [error, setError] = useState('');
@@ -20,7 +23,7 @@ const RoleSelection = () => {
 
     const fetchRoles = async () => {
         try {
-           const response = await axios.get("http://localhost:7171/api/role/list-role");
+           const response = await axios.get(`${Api_base_Url}/role/list-role`);
            setRoles(response.data.roles);
            setError('');
         } catch (error) {
@@ -37,7 +40,7 @@ const RoleSelection = () => {
         }
         try {
             
-            const response = await axios.get(`http://localhost:7171/api/access/list-permission?roleId=${selectedRole}`);
+            const response = await axios.get(`${Api_base_Url}/access/list-permission?roleId=${selectedRole}`);
            
             sessionStorage.setItem("permission", JSON.stringify(response.data.menu));
 

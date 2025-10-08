@@ -7,6 +7,8 @@ import '../../css/ClientReg.css'
 
 export default function Step2({ nextStep, prevStep, values, handleStep2Change, careFacility, clientNeeds }) {
 
+   const Api_base_Url = import.meta.env.VITE_API_BASE;
+
  const [errors, setErrors] = useState({});
  const [rows, setRows] = useState(values.step2_data?.length ? values.step2_data : [
   {
@@ -42,7 +44,7 @@ useEffect(() => {
 
     try {
       updateRow(index, { loading: true });
-      const res = await axios.get(`http://localhost:7171/api/address/${value}`);
+      const res = await axios.get(`${Api_base_Url}/address/${value}`);
       updateRow(index, { suggestions: res.data.suggestions || [] });
     } catch (err) {
       console.error("Address lookup failed", err);
@@ -53,7 +55,7 @@ useEffect(() => {
 
   const selectAddress = async (id, index) => {
     try {
-      const res = await axios.get(`http://localhost:7171/api/address/get/${id}`);
+      const res = await axios.get(`${Api_base_Url}/address/get/${id}`);
       const data = res.data;
 
       const fullAddress = [
@@ -163,7 +165,7 @@ const validateForm = () => {
                 className={`form-control ${errors[`post_code1_${index}`] ? "is-invalid" : row.post_code1 ? "is-valid" : ""}`}
                 value={row.post_code1}
                 onChange={(e) => handleInputChange(index, "post_code1", e.target.value)}
-                readOnly={index === 0}
+                // readOnly={index === 0}
               />
               {row.suggestions.length > 0 && (
                 <ul
@@ -193,7 +195,7 @@ const validateForm = () => {
                 className={`form-control ${errors[`place${index}`] ? "is-invalid" : row.place ? "is-valid" : ""}`}
                 value={row.address}
                 onChange={(e) => handleInputChange(index, "place", e.target.value)}
-                readOnly={index === 0}
+                // readOnly={index === 0}
               />
             </div>
 
@@ -204,7 +206,7 @@ const validateForm = () => {
                 className={`form-control ${errors[`address_${index}`] ? "is-invalid" : row.address ? "is-valid" : ""}`}
                 value={row.place}
                 onChange={(e) => handleInputChange(index, "address", e.target.value)}
-                readOnly={index === 0}
+                // readOnly={index === 0}
               />
             </div>
 
@@ -367,7 +369,7 @@ const validateForm = () => {
   <div>
     <button
       type="button"
-      className="btn btn-warning me-2"
+      className="btn btn-secondary me-2"
       onClick={prevStep}
     >
        ← Back
@@ -378,7 +380,7 @@ const validateForm = () => {
   <div>
     <button
       type="button"
-      className="btn btn-secondary me-2"
+      className="btn btn-warning me-2"
       onClick={addRow}
     >
       Add

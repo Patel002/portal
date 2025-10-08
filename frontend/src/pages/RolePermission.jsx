@@ -4,6 +4,9 @@ import axios from "axios";
 import showToast from '../helper/toast.js';
 
 const RolePermission = () => {
+
+    const Api_base_Url = import.meta.env.VITE_API_BASE;
+
     const [roles, setRoles] = useState([]);
     const [selectedRole, setSelectedRole] = useState(sessionStorage.getItem("selectedRole") || "");
     const [parentFilter, setParentFilter] = useState(sessionStorage.getItem("parentFilter") || "All");
@@ -41,7 +44,7 @@ const RolePermission = () => {
 
     const fetchRoles = async () => {
         try {
-            const response = await axios.get("http://localhost:7171/api/role/list-role");
+            const response = await axios.get(`${Api_base_Url}/role/list-role`);
             setRoles(response.data.roles);
         } catch (error) {
             console.log(error);
@@ -51,7 +54,7 @@ const RolePermission = () => {
 
     const fetchRolePermissions = async (roleId) => {
         try {
-            const response = await axios.get(`http://localhost:7171/api/access/list-permission?roleId=${roleId}`);
+            const response = await axios.get(`${Api_base_Url}/access/list-permission?roleId=${roleId}`);
             const permissionsData = response.data.permission || [];
             const permissionMap = {};
             
@@ -79,7 +82,7 @@ const RolePermission = () => {
 
     const fetchMenuPermissions = async () => {
         try {
-            const response = await axios.get(`http://localhost:7171/api/access/all-menu-permissions`);
+            const response = await axios.get(`${Api_base_Url}/access/all-menu-permissions`);
             const menuData = response.data.data || [];
     
             const structuredMenus = menuData.map(menu => ({
@@ -151,7 +154,7 @@ const RolePermission = () => {
 
             const results = await Promise.allSettled(
                 permissionsToSave.map(perm => 
-                    axios.post("http://localhost:7171/api/access/add-permission", perm)
+                    axios.post(`${Api_base_Url}/access/add-permission`, perm)
                 )
             );
     

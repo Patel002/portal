@@ -22,7 +22,7 @@ const shift_patterns = sequelize.define('shift_patterns', {
     },
     created_by: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     created_on: {
         type: DataTypes.DATE,

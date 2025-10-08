@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 
 const Step3 = ({ nextStep, prevStep, handleChange, values }) => {
-  const [useMainForFinance, setUseMainForFinance] = useState(false);
-  const [useMainForBilling, setUseMainForBilling] = useState(false);
-  const [useFinanceForBilling, setUseFinanceForBilling] = useState(false);
+ const useMainForFinance = values.useMainForFinance || false;
+const useMainForBilling = values.useMainForBilling || false;
+const useFinanceForBilling = values.useFinanceForBilling || false;
+
 
 
   useEffect(() => {
@@ -68,6 +69,7 @@ const Step3 = ({ nextStep, prevStep, handleChange, values }) => {
           className="form-control form-control-sm"
           value={values[field] || ""}
           onChange={handleChange(field)}
+          required
         />
       </div>
     </div>
@@ -81,6 +83,7 @@ const Step3 = ({ nextStep, prevStep, handleChange, values }) => {
           className="form-control form-control-sm"
           value={values[field] || ""}
           onChange={handleChange(field)}
+          required
         />
       </div>
     </div>
@@ -96,7 +99,7 @@ const Step3 = ({ nextStep, prevStep, handleChange, values }) => {
           className="form-check-input"
           id="useMainFinance"
           checked={useMainForFinance}
-          onChange={(e) => setUseMainForFinance(e.target.checked)}
+          onChange={(e) => handleChange("useMainForFinance")(e.target.checked)}
         />
         <label className="form-check-label" htmlFor="useMainFinance">
           Same as Main Contact Details
@@ -128,8 +131,8 @@ const Step3 = ({ nextStep, prevStep, handleChange, values }) => {
           id="useMainBilling"
           checked={useMainForBilling}
           onChange={(e) => {
-            setUseMainForBilling(e.target.checked);
-            if (e.target.checked) setUseFinanceForBilling(false);
+            handleChange("useMainForBilling")(e.target.checked);
+            if (e.target.checked) handleChange("useFinanceForBilling")(false);
           }}
         />
         <label className="form-check-label" htmlFor="useMainBilling">
@@ -144,8 +147,9 @@ const Step3 = ({ nextStep, prevStep, handleChange, values }) => {
           id="useFinanceBilling"
           checked={useFinanceForBilling}
           onChange={(e) => {
-            setUseFinanceForBilling(e.target.checked);
-            if (e.target.checked) setUseMainForBilling(false);
+            handleChange("useFinanceForBilling")(e.target.checked);
+            if (e.target.checked)
+              handleChange("useMainForBilling")(false);
           }}
         />
         <label className="form-check-label" htmlFor="useFinanceBilling">

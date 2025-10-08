@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import ProtectedRoute from "./hooks/ProtectedRoute";
 import RegisterPage from './pages/RegisterPage'
 import AdminLayout from "./pages/AdminLayout";
 import RegisterCandidate from "./pages/RegisterCandidateStep";
@@ -17,13 +18,18 @@ import ClientReg from "./pages/ClientReg";
 function App() {
   return (
     <Router>
-    {/* <AnimatePresence mode="wait"> */}
     <Routes>
-          <Route path="/" element={<Navigate to="/login" />} />
-          <Route path="/login" element={<Login />} />
           <Route path="/candidate" element={<RegisterPage />} />
           <Route path="/candidate/candidate_registration" element={<RegisterCandidate />} />
-          <Route path="/" element={<AdminLayout />}>
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/login" element={<Login />} />
+
+          
+          <Route path="/" element={
+            <ProtectedRoute>
+              <AdminLayout />
+            </ProtectedRoute>
+          }>
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="menu" element={<Menu />} />
               <Route path="roles" element={<Role />} />
@@ -35,7 +41,11 @@ function App() {
               <Route path="Job_Master/skills" element={<Skills />} />
               <Route path="Admin/candidateList" element={<CandidateInfo />} />
           </Route>
-              <Route path="Client" element={<ClientReg />} />
+             <Route path="/Client" element={
+              <ProtectedRoute>
+                <ClientReg />
+              </ProtectedRoute>
+            } />
       </Routes>
     </Router>
   )

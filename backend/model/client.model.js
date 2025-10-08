@@ -48,6 +48,7 @@ const Client = sequelize.define('client_register',{
     monthly_cost: DataTypes.DECIMAL(10, 2),
     monthly_payroll: DataTypes.DECIMAL(10, 2),
     payroll_timesheet: DataTypes.STRING,
+    subscription_type: DataTypes.STRING,
     no_payroll: DataTypes.STRING,
     main_fullName: DataTypes.STRING,
     main_position: DataTypes.STRING,
@@ -57,6 +58,7 @@ const Client = sequelize.define('client_register',{
     upload: DataTypes.TEXT,
 
     finance_name: DataTypes.STRING,
+    finance_no: DataTypes.STRING,
     finance_position: DataTypes.STRING,
     finance_mobile_code: DataTypes.STRING,
     finance_mobile: DataTypes.STRING,

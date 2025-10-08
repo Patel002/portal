@@ -9,6 +9,8 @@ import '../css/login.css'
 
 export default function Login() {
 
+   const Api_base_Url = import.meta.env.VITE_API_BASE;
+
   const successAudio = new Audio('/assets/success.mp3');
       successAudio.load();
 
@@ -33,7 +35,7 @@ export default function Login() {
   e.preventDefault();
 
   try {
-    const res = await axios.post("https://portal-sddm.onrender.com/api/auth/login", formData, {
+    const res = await axios.post(`${Api_base_Url}/auth/login`, formData, {
       headers: { "Content-Type": "application/json" },
     });
 
@@ -103,10 +105,10 @@ export default function Login() {
 
         <label htmlFor="password">Password</label>
         <input id='password 'type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} />
-        <div className="checkbox">
+        {/* <div className="checkbox">
           <input type="checkbox" name="remember" checked={formData.remember} onChange={handleChange} />
           <label>  </label>
-        </div>
+        </div> */}
         <button type="submit">Sign In</button>
       </form>
     </div>

@@ -7,13 +7,16 @@ import axios from "axios";
 import 'admin-lte';
 
 const AdminLayout = () => {
+
+    const Api_base_Url = import.meta.env.VITE_API_BASE;
+
     const navigate = useNavigate();
     const location = useLocation();
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [menuStructure, setMenuStructure] = useState([]);
    
     const role = sessionStorage.getItem("role"); 
-    console.log('role',role)
+    // console.log('role',role)
     const roleId = sessionStorage.getItem("roleId");
     // console.log('id',id)
 
@@ -39,10 +42,10 @@ const AdminLayout = () => {
                 try {
                     let response;
                     if (role === "SUPER ADMIN") {
-                        response = await axios.get(`http://localhost:7171/api/access/list?roleId=${roleId}`);
+                        response = await axios.get(`${Api_base_Url}/access/list?roleId=${roleId}`);
                         
                     } else {
-                        response = await axios.get(`http://localhost:7171/api/access/list?roleId=${roleId}`);   
+                        response = await axios.get(`${Api_base_Url}/access/list?roleId=${roleId}`);   
                     }
 
                     const data = response.data.data;

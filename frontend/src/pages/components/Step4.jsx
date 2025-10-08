@@ -1,6 +1,6 @@
-// Step4.js
 import { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
+import showToast from "../../helper/toast";
 
 const emptyShift = (sr = 1) => ({
   sr_no: sr,
@@ -16,21 +16,24 @@ const isShiftFilled = (s) =>
   s.shift_end.trim() !== "";
 
 const Step4 = ({ nextStep, prevStep, handleChange, values }) => {
-  // local mode: 'upload' or 'manual'
-  const [mode, setMode] = useState("manual");
-  // local working copy of shifts (mirror values.step4_data)
-  const [shifts, setShifts] = useState(() => values.step4_data || []);
 
-  // keep parent form values in sync when local shifts change
+  const successAudio = new Audio("/assets/success.mp3");
+  const errorAudio = new Audio("/assets/error.mp3");
+
+  const [mode, setMode] = useState("manual");
+  const [shifts, setShifts] = useState(() => values.shift_pattern || []);
+
+
   useEffect(() => {
-    if (JSON.stringify(values.step4_data) !== JSON.stringify(shifts)) {
-      if (handleChange) handleChange("step4_data", shifts);
+    if (JSON.stringify(values.shift_pattern) !== JSON.stringify(shifts)) {
+      if (handleChange) handleChange("shift_pattern")(shifts);
     }
   }, [shifts]);
-  // keep local shifts updated if parent changes externally
+
+
   useEffect(() => {
-    if (Array.isArray(values.step4_data)) setShifts(values.step4_data);
-  }, [values.step4_data]);
+    if (Array.isArray(values.shift_pattern)) setShifts(values.shift_pattern);
+  }, [values.shift_pattern]);
 
   // Add new shift only if last shift is filled (or there are none)
   const addShift = () => {
@@ -40,7 +43,7 @@ const Step4 = ({ nextStep, prevStep, handleChange, values }) => {
     } else {
       // Could show toast; here we simply prevent add
       // you can replace with showToast if available
-      alert("Please fill the previous shift before adding a new one.");
+      showToast("warning", "Please fill the previous shift before adding a new one.");
     }
   };
 
@@ -77,6 +80,7 @@ const Step4 = ({ nextStep, prevStep, handleChange, values }) => {
     const parsed = json.map((row, idx) => {
       const get = (...keys) =>
         keys.reduce((acc, k) => acc || row[k] || row[k?.toString?.().toLowerCase?.()] || "", "");
+      const shift_pattern = get("Shift Pattern", "shift_pattern", "pattern", "shift", "Pattern");
       const shift_type = get("Shift Type", "shift_type", "Type(1:Fixed Shift Pattern ,2:Emergency/Adhoc Shift Pattern)", "type","Type");
       const shift_start = get("Shift Start", "shift_start", "start_time", "start", "Start date");
       const shift_end = get("Shift End", "shift_end", "end_time", "end", "end date");
@@ -84,6 +88,7 @@ const Step4 = ({ nextStep, prevStep, handleChange, values }) => {
       const sr_no = idx + 1;
       return {
         sr_no,
+        shift_pattern: String(shift_pattern).toString(),
         shift_type: String(shift_type).toString(),
         shift_start: String(shift_start).toString(),
         shift_end: String(shift_end).toString(),
@@ -92,13 +97,24 @@ const Step4 = ({ nextStep, prevStep, handleChange, values }) => {
     });
 
     if (parsed.length === 0) {
-      alert("No data found in the uploaded file.");
+      showToast("error","No data found in the uploaded file.");
       return;
     }
 
     setMode("upload");
     setShifts(parsed);
+    showToast("success",`File "${file.name}" uploaded successfully with ${parsed.length} records.`);
+    successAudio.play().catch(() => {});
   };
+
+  const downloadTemplate = () => {
+  const link = document.createElement("a");
+  link.href = "/assets/templates/shift_pattern_template.csv"; // path in public folder
+  link.download = "shift_pattern_template.csv";
+  link.click();
+};
+
+
 
   // validate at least one filled shift for enabling Next
   const hasValidShift = shifts.some((s) => isShiftFilled(s));
@@ -112,7 +128,6 @@ const Step4 = ({ nextStep, prevStep, handleChange, values }) => {
 
   return (
     <div className="step4-form">
-
 
       <div className="mb-3">
         <div className="form-check form-check-inline">
@@ -141,6 +156,24 @@ const Step4 = ({ nextStep, prevStep, handleChange, values }) => {
             Upload File (CSV / XLS / XLSX)
           </label>
         </div>
+
+       <div className="mb-3 d-flex align-items-center">
+  <div className="me-2">
+    <button
+      type="button"
+      className="btn btn-outline-success btn-sm"
+      onClick={downloadTemplate}
+      title="Download CSV template for shift patterns"
+    >
+      <i className="bi bi-download me-1"></i> Download CSV Template
+    </button>
+  </div>
+  <small className="text-muted">
+    Use this template to prepare your shift data for upload.
+  </small>
+</div>
+
+
       </div>
 
       {mode === "upload" && (
@@ -159,6 +192,7 @@ const Step4 = ({ nextStep, prevStep, handleChange, values }) => {
                 <thead>
                   <tr>
                     <th>Sr No</th>
+                    <th>Shift Pattern</th>
                     <th>Shift Type</th>
                     <th>Shift Start</th>
                     <th>Shift End</th>
@@ -170,6 +204,7 @@ const Step4 = ({ nextStep, prevStep, handleChange, values }) => {
                   {shifts.map((s, i) => (
                     <tr key={i}>
                       <td>{s.sr_no}</td>
+                     <td>{s.shift_pattern}</td>
                       <td>{s.shift_type}</td>
                       <td>{s.shift_start}</td>
                       <td>{s.shift_end}</td>
@@ -210,14 +245,28 @@ const Step4 = ({ nextStep, prevStep, handleChange, values }) => {
                     />
                   </div>
 
-                  <div className="col-md-3">
-                    <label className="form-label">Shift Type</label>
+                  <div className="col-md-2">
+                    <label className="form-label">Shift Pattern</label>
                     <input
                       className="form-control form-control-sm"
-                      value={s.shift_type}
-                      onChange={(e) => updateShift(idx, "shift_type", e.target.value)}
+                      value={s.shift_pattern}
+                      onChange={(e) => updateShift(idx, "shift_pattern", e.target.value)}
+                      required
                     />
                   </div>
+
+                 <div className="col-md-2">
+                    <label className="form-label">Shift Type</label>
+                    <select
+                        className="form-control form-control-sm"
+                        value={s.shift_type} // controlled value
+                        onChange={(e) => updateShift(idx, "shift_type", e.target.value)}
+                    >
+                        <option value="">-Select-</option>
+                        <option value="1">Fixed Shift Pattern</option>
+                        <option value="2">Emergency/Adhoc Shift Pattern</option>
+                    </select>
+                    </div>
 
                   <div className="col-md-2">
                     <label className="form-label">Start</label>
@@ -226,6 +275,7 @@ const Step4 = ({ nextStep, prevStep, handleChange, values }) => {
                       className="form-control form-control-sm"
                       value={s.shift_start}
                       onChange={(e) => updateShift(idx, "shift_start", e.target.value)}
+                      required
                     />
                   </div>
 
@@ -236,15 +286,17 @@ const Step4 = ({ nextStep, prevStep, handleChange, values }) => {
                       className="form-control form-control-sm"
                       value={s.shift_end}
                       onChange={(e) => updateShift(idx, "shift_end", e.target.value)}
+                      required
                     />
                   </div>
 
-                  <div className="col-md-3">
+                  <div className="col-md-2">
                     <label className="form-label">Remarks</label>
                     <input
                       className="form-control form-control-sm"
                       value={s.remarks}
                       onChange={(e) => updateShift(idx, "remarks", e.target.value)}
+                      required
                     />
                   </div>
 
