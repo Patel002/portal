@@ -5,7 +5,7 @@ const sequelize = new Sequelize(
     'mech_dht',
     '2lPIac7ddOpfapJH',
     {
-        host: '103.250.153.83:81',
+        host: '103.250.153.83',
         dialect: 'mysql',
         logging: false,
         timezone: '+05:30'
