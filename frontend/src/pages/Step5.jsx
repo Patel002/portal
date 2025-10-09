@@ -1,3 +1,4 @@
+    import { useNavigate } from 'react-router-dom'; 
     import axios from 'axios';
     import showToast from '../helper/toast.js';
 
@@ -10,6 +11,8 @@
       errorAudio.load();
 
       const Api_base_Url = import.meta.env.VITE_API_BASE;
+
+      const navigate = useNavigate();
 
       const advertRefOptions = {
         "1": "Search Engine",
@@ -52,8 +55,8 @@
             successAudio.play();
             
             setTimeout(() => {
-            window.location.reload();
-          }, 2000);
+              navigate("/candidate"); 
+            }, 2000);
           }
 
           console.log(response.data);
