@@ -1,3 +1,18 @@
+
+.ClientStepForm {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  color: #1a1a1a;
+}
+
+.ClientStepForm .wizard-header h3 {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 600;
+  color: #0A1744;
+  margin-top: 10px;
+}
+
+
 .ClientStepForm ::selection{
   background-color: #F93A0B !important;
   color: #F2F5F8;
@@ -13,35 +28,62 @@
 }
 
 
-.ClientStepForm .wizard-navigation .nav li a {
-  display: block;
-  padding: 8px 15px;
-  /* border-radius: 0.9px !important; */
+.ClientStepForm .wizard-navigation .nav {
+  display: flex;
+  justify-content: space-between; 
   background: #0A1744;
-  color: white;
-  font-weight: 500;
-  transition: 0.3s;
-  border-right: 1px solid #ffffff33;
-}
-
-.ClientStepForm .wizard-navigation {
-  position: relative;
+  border-radius: 5px;  
+  overflow: hidden;    
   margin-bottom: 20px;
 }
 
-.ClientStepForm .wizard-navigation .nav {
-  display: flex;
-  justify-content: space-between;
-  border-bottom: none;
-}
-
 .ClientStepForm .wizard-navigation .nav li {
-  flex: 1;
+  flex: 1;          
   text-align: center;
-  margin-right: 8px;
-
+  margin: 0;          
 }
 
+.ClientStepForm .wizard-navigation .nav li a {
+  display: block;
+  padding: 8px 15px;
+  background: #0A1744; 
+  color: white;
+  font-weight: 500;
+  /* border-right: 1px solid #ffffff33; */
+  transition: 0.3s;
+}
+
+.ClientStepForm .wizard-navigation .nav li:last-child a {
+  border-right: none;
+}
+
+.ClientStepForm .wizard-navigation .nav li.active a {
+  background: #0000FF; 
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .ClientStepForm .wizard-navigation .nav li a {
+    padding: 6px 8px;     
+    font-size: 0.8rem;    
+  }
+}
+
+@media (max-width: 480px) {
+  .ClientStepForm .wizard-navigation .nav {
+    flex-direction: column; 
+  }
+  .ClientStepForm .wizard-navigation .nav li {
+    border-bottom: 1px solid #ffffff33; 
+  }
+  .ClientStepForm .wizard-navigation .nav li:last-child {
+    border-bottom: none;
+  }
+  .ClientStepForm .wizard-navigation .nav li a {
+    padding: 10px 12px;
+    text-align: center;
+  }
+}
 
 .ClientStepForm .wizard-navigation .nav li.active a {
   background: #3472F7 ;
@@ -67,4 +109,12 @@
   padding: 8px 20px;
   font-weight: 500;
   transition: 0.3s;
+}
+
+.ClientStepForm .section-line {
+  background-color: #ccccfd;
+  /* height: 0.5px; */
+  width: 90%;
+  margin: 1.2rem auto;
+  box-shadow: 0 0 10px #cbcbff;
 }

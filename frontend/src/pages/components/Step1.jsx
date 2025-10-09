@@ -137,7 +137,7 @@ export default function Step1({ nextStep, handleChange, values }) {
 
   
 return (
-  <div className="card-body">
+  <div className="card-body p-1">
    <form onSubmit={handleSubmit}>
     <div className="row">
       <div className="mb-1 col-md-3 col-sm-12">
@@ -240,7 +240,7 @@ return (
           <div className="row mt-3">
   {/* VAT Number */}
             <div className="mb-2 col-md-3 col-sm-6">
-                <label className="form-label small">VAT Number</label>
+                <label className="form-label">VAT Number <i className="text-danger">*</i></label>
                 <input
                 type="text"
                 className={`form-control form-control-sm  ${getClass("vat_number", values.vat_number || "")}`}
@@ -248,12 +248,13 @@ return (
                 onChange={handleChange("vat_number")}
                 onBlur={() => setTouched({ ...touched, vat_number: true })}
                 placeholder="Enter VAT Number"
+                required
                 />
             </div>
 
             {/* Company Registration Number */}
             <div className="mb-2 col-md-3 col-sm-6">
-                <label className="form-label small">Company Registration Number</label>
+                <label className="form-label">Company Registration Number <i className="text-danger">*</i></label>
                 <input
                 type="text"
                 className= {`form-control form-control-sm  ${getClass("company_reg_number", values.company_reg_number || "")}`}
@@ -261,24 +262,26 @@ return (
                 onChange={handleChange("company_reg_number")}
                 onBlur={() => setTouched({ ...touched, company_reg_number: true })}
                 placeholder="Enter Registration Number"
+                required
                 />
             </div>
 
             {/* Website */}
             <div className="mb-2 col-md-3 col-sm-6">
-                <label className="form-label small">Website</label>
+                <label className="form-label">Website <i className="text-danger">*</i></label>
                 <input
                 type="url"
                 className={`form-control form-control-sm  ${getClass("website", values.website || "")}`}
                 value={values.website || ""}
                 onChange={handleChange("website")}
                 placeholder="https://example.com"
+                required
                 />
             </div>
 
             {/* Client Logo + Preview */}
             <div className="mb-2 col-md-3 col-sm-6">
-                <label className="form-label small">Client Logo</label>
+                <label className="form-label">Client Logo</label>
                 <div className="d-flex align-items-center">
                 {/* File input takes full width minus preview space */}
                 <input
@@ -316,12 +319,11 @@ return (
             </div>
             </div>
             
-            <hr className="my-2 mx-n1 border-0 border-top border-secondary" style={{ opacity: 0.25, color:"#BFBFFF" }} />
-
+         <hr className="section-line" />
 
              <div className="row mt-3">
           <div className="form-group col-md-3 col-sm-6">
-            <label className="form-label small">Subscription Type <i className="text-danger">*</i></label>
+            <label className="form-label">Subscription Type <i className="text-danger">*</i></label>
             <select
               className="form-control form-control-sm"
               value={subscriptionType}
@@ -343,7 +345,7 @@ return (
         
 
            <div className="form-group col-md-3 col-sm-6">
-                <label className="form-label small">Monthly Subscription Cost <i className="text-danger">*</i></label>
+                <label className="form-label">Monthly Subscription Cost <i className="text-danger">*</i></label>
                 <input
                   type="text"
                   step="0.01"
@@ -362,7 +364,7 @@ return (
             <>
               {/* Monthly Payroll Fields */}
               <div className="form-group col-md-3 col-sm-6 payrolldiv">
-                <label className="form-label small">Monthly Payroll Subscription Cost <i className="text-danger">*</i></label>
+                <label className="form-label">Monthly Payroll Subscription Cost <i className="text-danger">*</i></label>
                 <input
                   type="text"
                   className={`form-control form-control-sm  ${getClass("monthly_payroll", values.monthly_payroll || "")}`}
@@ -374,7 +376,7 @@ return (
               </div>
 
               <div className="form-group col-md-3 col-sm-6 payrolldiv">
-                <label className="form-label small">Payroll Cost Per Timesheet <i className="text-danger">*</i></label>
+                <label className="form-label">Payroll Cost Per Timesheet <i className="text-danger">*</i></label>
                 <input
                   type="text"
                   className={`form-control form-control-sm  ${getClass("payroll_timesheet", values.payroll_timesheet || "")}`}
@@ -389,7 +391,7 @@ return (
             <>
               {/* Employment contract if no payroll */}
               <div className="form-group col-md-3 col-sm-6 nopayrolldiv">
-                <label className="form-label small">Employment Contract Supplied <i className="text-danger">*</i></label>
+                <label className="form-label ">Employment Contract Supplied <i className="text-danger">*</i></label>
                 <div>
                   <input
                     type="radio"
@@ -414,7 +416,7 @@ return (
               </div>
 
               <div className="col-md-3 col-sm-6 nopayrolldiv">
-                <label className="form-label small" htmlFor="upload">Upload Employment Contract</label>
+                <label className="form-label" htmlFor="upload">Upload Employment Contract</label>
                 <input
                   type="file"
                   className="form-control form-control-sm"
@@ -427,10 +429,11 @@ return (
           )}
         </div>
 
-         <hr className="my-2 mx-n1 border-0 border-top border-secondary" style={{ opacity: 0.25,backgroundColor:"#BFBFFF" }} />
+        <hr className="section-line" />
+
 
        <div className="row mt-3">
-  <h6 style={{ color: "#BFBFFF", textDecoration: "underline"}}>Main Contact Details</h6>
+  <h6 style={{ color: "#EBA9E0", textDecoration: "underline"}}>Main Contact Details</h6>
 
   <div className="mb-3 col-md-4 col-sm-12">
     <label className="form-label">

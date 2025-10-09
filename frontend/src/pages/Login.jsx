@@ -6,7 +6,6 @@ import bgIllustration from "/assets/img/auth.png"
 import showToast from '../helper/toast.js';
 import '../css/login.css'
 
-
 export default function Login() {
 
    const Api_base_Url = import.meta.env.VITE_API_BASE;
@@ -45,7 +44,7 @@ export default function Login() {
       showToast("success", message);
       successAudio.play();
 
-      // Store token
+    
       localStorage.setItem("token", token);
 
       // Decode token
@@ -59,7 +58,7 @@ export default function Login() {
 
      setInterval(()=>{
        window.location.href = "/dashboard";
-     },3100)
+     },771)
     }
     
   } catch (err) {

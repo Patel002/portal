@@ -183,7 +183,7 @@ const AdminLayout = () => {
                           />
                     <span className="font-weight-bold text-decoration-none">Nightingale-Care</span>
                 </Link>
-                <div className="sidebar">
+                <div className="sidebar font-weight-light">
                 {/* <div className="form-inline mt-3">
                         <div className="input-group" data-widget="sidebar-search">
                             <input className="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search" />

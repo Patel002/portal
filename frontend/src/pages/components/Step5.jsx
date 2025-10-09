@@ -3,7 +3,7 @@ import * as XLSX from "xlsx";
 import showToast from "../../helper/toast";
 
 const emptyPayRate = (type = "RD", sr = 1) => ({
-  // sr_no: type === "RD" ? sr : `BH${sr}`,
+  sr_no: type === "RD" ? sr : `BH${sr}`,
   regular_day_morning: "",
   regular_day_afternoon: "",
   regular_day_night: "",
@@ -25,9 +25,33 @@ export default function Step5({ handleChange, values, jobTitle, prevStep, submit
   const successAudio = new Audio("/assets/success.mp3");
   const errorAudio = new Audio("/assets/error.mp3");
 
-  const [selectedJob, setSelectedJob] = useState("");
-  const [regularPayRates, setRegularPayRates] = useState([emptyPayRate()]);
-  const [bankHolidayPayRates, setBankHolidayPayRates] = useState([emptyPayRate("BH")]);
+  
+  const initialRegularPayRates = values.payrate?.map((p, idx) => ({
+    sr_no: idx + 1,
+    regular_day_morning: p.regular_day_morning || "",
+    regular_day_afternoon: p.regular_day_afternoon || "",
+    regular_day_night: p.regular_day_night || "",
+    regular_day_weekend_morning: p.regular_day_weekend_morning || "",
+    regular_day_weekend_afternoon: p.regular_day_weekend_afternoon || "",
+    regular_day_weekend_night: p.regular_day_weekend_night || "",
+    regular_day_sleep_in: p.regular_day_sleep_in || "",
+    regular_day_waking_night_weekday: p.regular_day_waking_night_weekday || "",
+    regular_day_waking_night_weekend: p.regular_day_waking_night_weekend || "",
+  }));
+
+  const initialBankHolidayPayRates = values.payrate?.map((p, idx) => ({
+    sr_no: `BH${idx + 1}`,
+    bank_holiday_morning: p.bank_holiday_morning || "",
+    bank_holiday_afternoon: p.bank_holiday_afternoon || "",
+    bank_holiday_night: p.bank_holiday_night || "",
+    bank_holiday_sleep_in: p.bank_holiday_sleep_in || "",
+    bank_holiday_waking_night: p.bank_holiday_waking_night || "",
+  }));
+
+  const [regularPayRates, setRegularPayRates] = useState(initialRegularPayRates || [emptyPayRate()]);
+  const [bankHolidayPayRates, setBankHolidayPayRates] = useState(initialBankHolidayPayRates || [emptyPayRate("BH")]);
+
+  const [selectedJob, setSelectedJob] = useState(values.payrate?.[0]?.job_title || "");
 
   
   useEffect(() => {
@@ -190,10 +214,16 @@ export default function Step5({ handleChange, values, jobTitle, prevStep, submit
         className="form-control mb-3"
         value={selectedJob}
         onChange={(e) => {
-          setSelectedJob(e.target.value);
-          setRegularPayRates([emptyPayRate()]);
-          setBankHolidayPayRates([emptyPayRate("BH")]);
-        }}
+        const val = e.target.value;
+        setSelectedJob(val);
+
+    if (!values.payrate?.some(p => p.job_title === val)) {
+      setRegularPayRates([emptyPayRate()]);
+      setBankHolidayPayRates([emptyPayRate("BH")]);
+    }
+
+    }}
+
       >
         <option value="">--Select Job Title--</option>
         {jobTitle.map((job) => (

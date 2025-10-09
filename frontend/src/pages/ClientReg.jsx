@@ -211,6 +211,7 @@ const token = sessionStorage.getItem("token");
             </ul>
           </div>
 
+<div className="wizard-content">
           {step === 1 && (
             <Step1
               nextStep={nextStep}
@@ -257,6 +258,7 @@ const token = sessionStorage.getItem("token");
             submitForm={submitForm}
             />
            )}
+           </div>
         </div>
       </div>
     </div>
