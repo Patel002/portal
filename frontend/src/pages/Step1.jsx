@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function Step1({ nextStep, handleChange, values, countryCodes }) {
-  // const [postcode, setPostcode] = useState();
-  // const [address_line_1, setAddress] = useState();
-  // const [place, setPlace] = useState();
+  
+   const Api_base_Url = import.meta.env.VITE_API_BASE;
+
   const [hasOtherPassport, setHasOtherPassport] = useState(values.passport === "Other");
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -96,7 +96,7 @@ useEffect(() => {
 
     try {
       setLoading(true);
-      const res = await axios.get(`https://portal-sddm.onrender.com/api/address/${value}`);
+      const res = await axios.get(`${Api_base_Url}/address/${value}`);
       
       setSuggestions(res.data.suggestions || []);
 
@@ -110,7 +110,7 @@ useEffect(() => {
 
    const selectAddress = async (id) => {
     try {
-      const res = await axios.get(`https://portal-sddm.onrender.com/api/address/get/${id}`);
+      const res = await axios.get(`${Api_base_Url}/address/get/${id}`);
       const data = res.data;
 
       const fullAddress = [

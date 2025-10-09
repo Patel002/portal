@@ -9,6 +9,8 @@
       const errorAudio = new Audio('/assets/error.mp3');
       errorAudio.load();
 
+      const Api_base_Url = import.meta.env.VITE_API_BASE;
+
       const advertRefOptions = {
         "1": "Search Engine",
         "2": "Referral",
@@ -39,7 +41,7 @@
         }
 
         try {
-          const response = await axios.post('https://portal-sddm.onrender.com/api/candidate/candidate', formDataToSend, {
+          const response = await axios.post(`${Api_base_Url}/candidate/candidate`, formDataToSend, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
