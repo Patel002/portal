@@ -23,7 +23,7 @@ h3 {
 }
 
 /* Card styling */
-.stepForm .wizard-card {
+.wizard-card {
   background: #fff;
   border-radius: 12px;
   /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); */
@@ -34,17 +34,17 @@ h3 {
 }
 
 /* Logo */
-.stepForm .wizard-header .brand-logo img {
+.wizard-header .brand-logo img {
   height: 70px;
 }
 
-.stepForm .wizard-header {
+.wizard-header {
   text-align: left;
   margin-bottom: 20px;
 }
 
 /* Title */
-.stepForm .wizard-header h3 {
+.wizard-header h3 {
   font-size: 22px;
   font-weight: 100;
   color: black;
@@ -52,69 +52,39 @@ h3 {
 }
 
 /* Nav pills (step tabs) */
-.stepForm .wizard-navigation {
+.wizard-navigation {
   position: relative;
   margin-bottom: 20px;
 }
 
-.stepForm .wizard-navigation .nav {
+.wizard-navigation .nav {
   display: flex;
-  justify-content: space-between; 
-  background: #0A1744;
-  border-radius: 5px;  
-  overflow: hidden;    
-  margin-bottom: 20px;
+  justify-content: space-between;
+  border-bottom: none;
 }
 
-.stepForm .wizard-navigation .nav li {
-  flex: 1;          
+.wizard-navigation .nav li {
+  flex: 1;
   text-align: center;
-  margin: 0;          
 }
 
-.stepForm .wizard-navigation .nav li a {
+.wizard-navigation .nav li a {
   display: block;
-  padding: 8px 15px;
-  background: #0A1744; 
+  padding: 10px 15px;
+  /* border-radius: 2px; */
+  background: #0A1744;
   color: white;
   font-weight: 500;
-  /* border-right: 1px solid #ffffff33; */
   transition: 0.3s;
 }
 
-.stepForm .wizard-navigation .nav li:last-child a {
-  border-right: none;
+.wizard-navigation .nav li a:hover {
+  color: white;
+  /* transform: scale(1.03); */
 }
 
-.stepForm .wizard-navigation .nav li.active a {
-  background: #0000FF; 
-  color: #fff;
-}
 
-@media (max-width: 768px) {
-  .stepForm .wizard-navigation .nav li a {
-    padding: 6px 8px;     
-    font-size: 0.8rem;    
-  }
-}
-
-@media (max-width: 480px) {
-  .stepForm .wizard-navigation .nav {
-    flex-direction: column; 
-  }
-  .stepForm .wizard-navigation .nav li {
-    border-bottom: 1px solid #ffffff33; 
-  }
-  .stepForm .wizard-navigation .nav li:last-child {
-    border-bottom: none;
-  }
-  .stepForm .wizard-navigation .nav li a {
-    padding: 10px 12px;
-    text-align: center;
-  }
-}
-
-.stepForm .wizard-navigation .nav li.active a {
+.wizard-navigation .nav li.active a {
   background: #FE6C5F ;
   color: #fff;
 }
