@@ -304,4 +304,112 @@ const getParentEntity = async(req, res) => {
   }
  }
 
-export { registerClient, getParentEntity, getAllClientInfo };
+ const updateClientDetails = async (req, res) => {
+  try {
+
+    const { client_id } = req.query;
+    const payload = req.body;
+
+    if (!client_id) {
+      return res.status(400).json(new ApiResponse(400, {}, "Client ID is required in query parameters."));
+    }
+    
+    if (Object.keys(payload).length === 0) {
+        return res.status(400).json(new ApiResponse(400, {}, "Request body cannot be empty for an update."));
+    }
+    
+    const client = await Client.findByPk(client_id);
+    
+    if (!client) {
+      return res.status(404).json(new ApiResponse(404, {}, "Client not found"));
+    }
+
+    Object.assign(client, payload);
+
+    client.updated_by = req.user?.id || null; 
+    client.updated_on = new Date(); 
+
+    const updatedClient = await client.save();
+
+    return res.status(200).json(new ApiResponse(200, updatedClient, "Client profile updated successfully"));
+
+  } catch (err) {
+    console.error("Error updating client profile:", err);
+    return res.status(500).json(new ApiResponse(500, {}, err.message));
+  }
+};
+
+const updateClientService = async (req, res) => {
+    try {
+    const { client_id, service_entries } = req.body;
+
+    if (!client_id) {
+      return res.status(400).json(new ApiResponse(400, {}, "Client ID is required."));
+    }
+
+    if (!Array.isArray(service_entries) || service_entries.length === 0) {
+      return res.status(400).json(new ApiResponse(400, {}, "Service entries array is required."));
+    }
+
+    const client = await Client.findByPk(client_id);
+    if (!client) {
+      return res.status(404).json(new ApiResponse(404, {}, "Client not found."));
+    }
+
+    const updated = [];
+
+    for (const entry of service_entries) {
+      if (!entry.id) {
+        return res.status(400).json(new ApiResponse(400, {}, "Each service entry must include an 'id' to update."));
+      }
+
+      const existing = await ClientRegistration.findOne({
+        where: {
+          id: entry.id,
+          client_id,
+          deleted: "N"
+        }
+      });
+
+      if (!existing) {
+        return res.status(404).json(new ApiResponse(404, {}, `Service entry with ID ${entry.id} not found.`));
+      }
+
+      const clientNeed = Array.isArray(entry.client_need)
+        ? entry.client_need.join(",")
+        : entry.client_need || "";
+
+      const data = {
+        post_code: entry.post_code1,
+        place: entry.place,
+        address: entry.address,
+        address_type: entry.type,
+        entity_name: entry.entity_name,
+        care_type: entry.care_facility,
+        client_need: clientNeed,
+        facility_contact_name: entry.facility_contact_name || "",
+        landline_code: entry.facility_lane_code || "",
+        landline_no: entry.facility_contact_landline_no || "",
+        mobile_code: entry.facility_mobile_code || "",
+        mobile_no: entry.facility_contact_mobile_no || "",
+        email: entry.facility_contact_email || "",
+        updated_by: req.user?.id || null,
+        updated_on: new Date()
+      };
+
+      await ClientRegistration.update(data, {
+        where: { id: entry.id }
+      });
+
+      updated.push({ id: entry.id, status: "updated" });
+    }
+
+    return res.status(200).json(new ApiResponse(200, updated, "Client service entries updated successfully."));
+    
+  } catch (err) {
+    console.error("Error updating client service:", err);
+    return res.status(500).json(new ApiResponse(500, {}, err.message));
+  }
+};
+
+export { registerClient, getParentEntity, getAllClientInfo, updateClientDetails, updateClientService };
