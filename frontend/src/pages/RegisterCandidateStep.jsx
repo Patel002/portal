@@ -6,6 +6,7 @@ import Step3 from "./Step3";
 import Step4 from "./Step4";
 import Confirmation from "./Step5";
 import "../css/StepForm.css";
+import LoaderScreen from "./components/Loader";
 
 const RegisterCandidate = () => {
   const [step, setStep] = useState(1);
@@ -46,7 +47,7 @@ const RegisterCandidate = () => {
     careFacility: [],
   });
 
-  console.log(formData)
+  // console.log(formData)
   const [touched, setTouched] = useState({});
   const {
     jobTitleQuery,
@@ -58,9 +59,6 @@ const RegisterCandidate = () => {
   } = useCandidateOptions();
 
 
-  // if (isLoading) return <h3>Loading...</h3>;
-  // if (isError) return <h3>Error loading options</h3>;
-
   const options = {
     jobTitle: jobTitleQuery.data || [],
     countryCode: countryCodeQuery.data || [],
@@ -69,8 +67,8 @@ const RegisterCandidate = () => {
     clientNeeds: clientNeedsQuery.data || []
   };
 
-  console.log("options", options);
-console.log("isLoading", isLoading);
+//   console.log("options", options);
+// console.log("isLoading", isLoading);
 
 
   // useEffect(() => {
@@ -104,8 +102,8 @@ console.log("isLoading", isLoading);
       };
     });
   };
-
-  if (isLoading) return <h3>Loading options...</h3>;
+  
+  if (isLoading) return <LoaderScreen message="Loading candaidate options..." />;
   // if (isError) return <h3>Error: {error.message}</h3>;
 
   return (

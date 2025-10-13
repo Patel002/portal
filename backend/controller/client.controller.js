@@ -275,10 +275,33 @@ const getParentEntity = async(req, res) => {
             attributes: ["client_organisation"]
         })
 
-        return res.status(200).json(new ApiResponse(200, parentEntity, "Parent Entity Fetched Successfully"));
+      return res.status(200).json(new ApiResponse(200, parentEntity, "Parent Entity Fetched Successfully"));
     } catch (error) {
      return res.status(500).json(new ApiResponse(500, {}, error.message));
     }
 }
 
-export { registerClient, getParentEntity };
+ const getAllClientInfo = async(req, res) => {
+  try {
+    const clients = await Client.findAll({
+      where: { status: "1" },
+      attributes:[
+        "id",
+        "client_organisation",
+        "parent_entity",
+        "post_code",
+        "place",
+        "register_address",
+        "main_fullName",
+        "mobile_number",
+        "main_email",
+      ]
+    })
+      
+    return res.status(200).json(new ApiResponse(200, clients, "clients Fetched Successfully"))
+  } catch (error) {
+    return res.status(500).json(new ApiResponse(500, {}, error.message));
+  }
+ }
+
+export { registerClient, getParentEntity, getAllClientInfo };

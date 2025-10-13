@@ -49,10 +49,10 @@ export default function Step1({ nextStep, handleChange, values, countryCodes }) 
   );
   
 
-  console.log("Form values at submit:", values);
-console.log("Validation results:", 
-  Object.keys(validators).map(f => ({ field: f, value: values[f], valid: isValid(f, values[f] || "") }))
-);
+//   console.log("Form values at submit:", values);
+// console.log("Validation results:", 
+//   Object.keys(validators).map(f => ({ field: f, value: values[f], valid: isValid(f, values[f] || "") }))
+// );
 
 
   if (!allValid) {

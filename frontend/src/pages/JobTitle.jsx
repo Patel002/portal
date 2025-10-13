@@ -77,7 +77,7 @@ const JobTitle = () => {
                 successAudio.play();
             }
 
-            console.log(response);
+            // console.log(response);
         } catch (error) {
             setError(error.response?.data?.message);
         }
@@ -90,7 +90,7 @@ const JobTitle = () => {
             setError('');
 
 
-            console.log("Client needs",res.data.data)
+            // console.log("Client needs",res.data.data)
 
         } catch (error) {
             console.error("Error fetching Needs:", error);

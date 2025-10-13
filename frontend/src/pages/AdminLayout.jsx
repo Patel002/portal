@@ -4,7 +4,7 @@ import '../css/AdminLayout.css';
 import logo from '/public/assets/logo-filled.png';
 import SidebarMenu from './Sidebar';
 import axios from "axios";
-import 'admin-lte';
+// import 'admin-lte';
 
 const AdminLayout = () => {
 
@@ -49,7 +49,7 @@ const AdminLayout = () => {
                     }
 
                     const data = response.data.data;
-                    console.log("Menu API response:", data);
+                    // console.log("Menu API response:", data);
 
                     let menuMap = new Map();
                     let menuTree = [];
@@ -86,7 +86,7 @@ const AdminLayout = () => {
                 return menu.submenus.length > 0 || menu.url;
             });
 
-                    console.log("Menu tree:", menuTree);
+                    // ("Menu tree:", menuTree);
                     setMenuStructure(menuTree);
                 } catch (error) {
                     console.error("Error fetching menu:", error);

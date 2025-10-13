@@ -119,7 +119,6 @@ const candidateRegister = async(req, res) => {
 
 const getAllInfoCandidate = async (req, res) => {
   try {
-    // Step 1: Fetch all candidates
     const candidates = await Candidate.findAll({
       attributes: [
         "candidate_id",
@@ -138,7 +137,6 @@ const getAllInfoCandidate = async (req, res) => {
       throw new ApiError(404, "No candidate info found");
     }
 
-    // Step 2: Fetch all reference tables once
     const [jobTitles, skillsList, facilities, needs] = await Promise.all([
       job_title.findAll({ attributes: ["id", "name"] }),
       skills.findAll({ attributes: ["id", "name"] }),
@@ -146,7 +144,6 @@ const getAllInfoCandidate = async (req, res) => {
       client_needs.findAll({ attributes: ["id", "name"] }),
     ]);
 
-    // Convert to maps for fast lookup
     const jobTitleMap = Object.fromEntries(jobTitles.map(j => [j.id, j.name]));
     const skillMap = Object.fromEntries(skillsList.map(s => [s.id, s.name]));
     const facilityMap = Object.fromEntries(facilities.map(f => [f.id, f.facility_name]));
@@ -157,10 +154,6 @@ const getAllInfoCandidate = async (req, res) => {
       candidate_name: c.candidate_name,
       post_code: c.post_code,
       address_line_1: c.address_line_1,
-      // job_title: c.job_title,
-      // skills: c.skills,
-      // care_facility: c.care_facility,
-      // client_need: c.client_need,
       form_status: c.form_status,
 
       job_titles: c.job_title
@@ -234,8 +227,9 @@ const formAction = async(req, res) => {
   }
 }
 
+
 export {
     candidateRegister,
     getAllInfoCandidate,
-    formAction
+    formAction,
 }

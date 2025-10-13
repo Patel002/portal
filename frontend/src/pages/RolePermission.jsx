@@ -58,7 +58,7 @@ const RolePermission = () => {
             const permissionsData = response.data.permission || [];
             const permissionMap = {};
             
-            console.log("permission map" ,permissionMap)
+            // console.log("permission map" ,permissionMap)
             permissionsData.forEach((perm) => {
                 const permissionKey = `menu_${perm.menu_id}`;
                 
@@ -94,7 +94,7 @@ const RolePermission = () => {
                 active: menu.active,
                 permissions: menu.permissions || []
                 }));
-            console.log("Menu Permissions:", structuredMenus);
+            // console.log("Menu Permissions:", structuredMenus);
 
             setMenuPermissions(structuredMenus);
         } catch (error) {
@@ -150,7 +150,7 @@ const RolePermission = () => {
                 }
             });
     
-            console.log("Saving permissions:", permissionsToSave);
+            // console.log("Saving permissions:", permissionsToSave);
 
             const results = await Promise.allSettled(
                 permissionsToSave.map(perm => 
@@ -190,7 +190,7 @@ const RolePermission = () => {
     const getParentFilterOptions = () => {
         const parents = new Set(["All"]);
 
-        console.log("parent names", parents)
+        // console.log("parent names", parents)
         
         menuPermissions.forEach(menu => {
             if (menu.parent_id) {
@@ -200,7 +200,7 @@ const RolePermission = () => {
             }
         });
 
-        console.log("parent return values", Array.from(parents))
+        // console.log("parent return values", Array.from(parents))
         
         return Array.from(parents);
     };

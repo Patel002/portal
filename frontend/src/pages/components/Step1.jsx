@@ -42,7 +42,7 @@ export default function Step1({ nextStep, handleChange, values }) {
             setParent(res.data.data || []);
             
         } catch (error) {
-            console.log("step 1", error);
+            // console.log("step 1", error);
         }   
         }
         fetchParent();

@@ -54,12 +54,25 @@
             showToast("success", "Candidate Added Successfully");
             successAudio.play();
             
+            try {
+              await axios.post(`${Api_base_Url}/mail/send`,{
+                to: values.email_id,
+                subject: "Application Received",
+                text: `Hi ${values.candidate_name}, your application has been received.`,
+                candidate: values
+              })
+              // console.log("Confirmation email sent");
+
+            } catch (error) {
+              console.error(`Email send falied`,error.response.data || error)
+            }
+            
             setTimeout(() => {
               navigate("/candidate"); 
             }, 2000);
           }
 
-          console.log(response.data);
+          // console.log(response.data);
 
       } catch (error) {
           if (error.response) {
@@ -77,7 +90,7 @@
         <div className="confirmation">
           {/* <h3 className="mb-4">✅ Confirm Your Details Before Submitting</h3> */}
 
-          {/* --- Step 1: Basic Details --- */}
+    
            <div className="card shadow-sm rounded-3 mb-4">
       <div className="card-header text-white d-flex justify-content-between align-items-center">
         <h5 className="mb-0">Step 1: Basic Information</h5>

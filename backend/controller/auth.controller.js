@@ -64,6 +64,7 @@ import crypto from 'crypto';
       login_date: new Date(),
       ip_address: req.ip,
     })
+    
 
     return res.status(200)
            .json({

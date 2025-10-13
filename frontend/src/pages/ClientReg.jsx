@@ -64,7 +64,7 @@ const ClientReg = () => {
     })
 
     useEffect(() => {
-  console.log("Updated formData:", formData);
+  // console.log("Updated formData:", formData);
 }, [formData]);
 
 

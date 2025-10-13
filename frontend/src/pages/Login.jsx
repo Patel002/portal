@@ -49,7 +49,7 @@ export default function Login() {
 
       // Decode token
       const decodedToken = jwtDecode(token);
-      console.log("Decoded:", decodedToken);
+      // console.log("Decoded:", decodedToken);
 
       sessionStorage.setItem("token", token);
       sessionStorage.setItem("creater", decodedToken.id);
