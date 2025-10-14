@@ -304,29 +304,50 @@ const getParentEntity = async(req, res) => {
   }
  }
 
- const updateClientDetails = async (req, res) => {
+const updateClientDetails = async (req, res) => {
   try {
 
     const { client_id } = req.query;
-    const payload = req.body;
+    const payload = req.body; 
 
     if (!client_id) {
       return res.status(400).json(new ApiResponse(400, {}, "Client ID is required in query parameters."));
     }
-    
+        
     if (Object.keys(payload).length === 0) {
-        return res.status(400).json(new ApiResponse(400, {}, "Request body cannot be empty for an update."));
+      return res.status(400).json(new ApiResponse(400, {}, "Request body cannot be empty for an update."));
     }
-    
+        
     const client = await Client.findByPk(client_id);
-    
+        
     if (!client) {
       return res.status(404).json(new ApiResponse(404, {}, "Client not found"));
     }
 
-    Object.assign(client, payload);
+    const updateFields = {};
+    const allowedEmptyFields = ['parent_entity', 'client_logo','upload'];
+        
+    for (const key in payload) {
+      const value = payload[key];
 
-    client.updated_by = req.user?.id || null; 
+      if (!allowedEmptyFields.includes(key) && (value === undefined || value === null)) {
+        continue;
+      }
+
+      if (typeof value === 'string' && value.trim() === '') {
+        if (allowedEmptyFields.includes(key)) {
+          updateFields[key] = null; 
+        } else {
+          continue; 
+        }
+      } else {
+        updateFields[key] = value;
+      }
+    }
+        
+    Object.assign(client, updateFields);
+
+    client.updated_by = req.user?.id || ""; 
     client.updated_on = new Date(); 
 
     const updatedClient = await client.save();
