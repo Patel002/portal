@@ -1,29 +1,35 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import $ from "jquery";
 import "datatables.net-bs5";
+import showToast from "../helper/toast";
 
 const Clientlist = () => {
+
+   const token =  sessionStorage.getItem('token')
 
     const successAudio = new Audio('/src/assets/success.mp3');
     successAudio.load();
 
   const Api_base_Url = import.meta.env.VITE_API_BASE;
 
-  const [client, setCandidate] = useState([]);
+  const [client, setClient] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredCandidates, setFilteredCandidates] = useState([]);
+  const [filteredClient, setFilteredClient] = useState([]);
   const tableRef = useRef(null);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
-    fetchCandidates();
+    fetchClientData();
   }, []);
 
-  const fetchCandidates = async () => {
+  const fetchClientData = async () => {
     try {
       const response = await axios.get(`${Api_base_Url}/client/get-client-info`);
-      setCandidate(response.data.data); 
-      setFilteredCandidates(response.data.data);
+      setClient(response.data.data); 
+      setFilteredClient(response.data.data);
     } catch (error) {
       console.error(error);
     }
@@ -35,12 +41,10 @@ const Clientlist = () => {
     const filtered = client.filter((c) =>
       c.candidate_name.toLowerCase().includes(term.toLowerCase())
     );
-    setFilteredCandidates(filtered);
+    setFilteredClient(filtered);
   };
 
   useEffect(() => {
-       
-
          if ($.fn.DataTable.isDataTable(tableRef.current)) {
       $(tableRef.current).DataTable().destroy();
     }
@@ -51,6 +55,27 @@ const Clientlist = () => {
         
     }, [client]);
 
+    const handleAction = async(id) => {
+        try {
+            await axios.patch(`${Api_base_Url}/client/delete?id=${id}`,{
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+              }
+            });
+            fetchClientData();
+            showToast("success", `Application deleted successfully`);
+            successAudio.play();
+            
+        } catch (error) {
+            console.log(error)
+            showToast("error", error.response.data.errors);
+        }
+    }
+
+    const handleEdit = async(id) => {
+       navigate(`/edit-client/${btoa(id)}`);
+    }
 
 
   return (
@@ -83,7 +108,7 @@ const Clientlist = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredCandidates.map((client) => (
+              {filteredClient.map((client) => (
                 <tr key={client.id}>
                   <td>{client.client_organisation}</td>
                   <td>{client.post_code}</td>
@@ -103,21 +128,23 @@ const Clientlist = () => {
                         </button>
                         <ul className="dropdown-menu dropdown-menu-end">
                             <li>
-                            <button className="dropdown-item">
+                            <button className="dropdown-item"
+                              onClick={() => handleEdit(client.id)}
+                            >
                                 <i className="fas fa-edit text-primary me-2"></i> Edit
                             </button>
                             </li>
-                            <li>
+                            {/* <li>
                             <button className="dropdown-item"
                             onClick={() => handleAction(client.candidate_id, "APPROVED")}>
                                 <i className="fas fa-check text-success me-2"></i> Approve
                             </button>
-                            </li>
+                            </li> */}
                             <li>
                             <button className="dropdown-item"
-                            onClick={() => handleAction(client.candidate_id, "REJECTED")}
+                            onClick={() => handleAction(client.id)}
                             >
-                                <i className="fas fa-times text-danger me-2"></i> Reject
+                                <i className="fas fa-times text-danger me-2"></i> Delete Application
                             </button>
                             </li>
                         </ul>

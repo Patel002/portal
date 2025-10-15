@@ -1,5 +1,7 @@
 import { sequelize } from '../database/db.connection.js';
 import { DataTypes } from 'sequelize';
+import { client_needs } from './client_needs.model.js';
+import { careFacility } from './care_facility.model.js';
 
 const ClientRegistration = sequelize.define('client_register2', {
     id: {
@@ -50,5 +52,17 @@ const ClientRegistration = sequelize.define('client_register2', {
     tableName: 'client_register_step2',
     timestamps: false
 })
+
+ClientRegistration.belongsTo(careFacility, {
+  foreignKey: 'care_type',
+  as: 'careType'          
+});
+
+ClientRegistration.belongsToMany(client_needs, {
+  through: 'client_needs',
+  foreignKey: 'id',
+  otherKey: 'id',
+  as: 'clientNeeds'
+});
 
 export { ClientRegistration };

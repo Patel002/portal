@@ -44,7 +44,7 @@ const RoleSelection = () => {
            
             sessionStorage.setItem("permission", JSON.stringify(response.data.menu));
 
-            console.log('permission from role selection',JSON.stringify(response.data.menu));
+            // console.log('permission from role selection',JSON.stringify(response.data.menu));
 
         } catch (error) {
         setError(error.response?.data?.message);

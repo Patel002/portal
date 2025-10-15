@@ -12,7 +12,7 @@ export default function Step2({ nextStep, prevStep, values, handleStep2Change, c
  const [errors, setErrors] = useState({});
  const [rows, setRows] = useState(values.step2_data?.length ? values.step2_data : [
   {
-     id: Date.now(),
+      id: Date.now(),
       post_code1: values.post_code || "",
       address: values.address_list || "",
       place: values.postal_address || "",
@@ -41,7 +41,6 @@ useEffect(() => {
       updateRow(index, { suggestions: [] });
       return;
     }
-
     try {
       updateRow(index, { loading: true });
       const res = await axios.get(`${Api_base_Url}/address/${value}`);
@@ -296,7 +295,7 @@ const validateForm = () => {
             </div>
 
              <div className="col-md-3 col-sm-6 mb-2">
-              <label className="form-label">Facility Type Contact Name</label>
+              <label className="form-label">Facility Type Contact Name <i className="text-danger">*</i></label>
                 <input
                 type="text"
                 className={`form-control ${errors[`facility_type_contact_name_${index}`] ? "is-invalid" : row.facility_type_contact_name ? "is-valid" : ""}`}

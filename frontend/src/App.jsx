@@ -16,6 +16,7 @@ import Skills from "./pages/Skills";
 import CandidateInfo from "./pages/CandidateInfo";
 import ClientReg from "./pages/ClientReg";
 import Clientlist from "./pages/Clientlist";
+import Edituser from "./pages/components/EditUser";
 function App() {
   return (
     <Router>
@@ -25,7 +26,6 @@ function App() {
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/login" element={<Login />} />
 
-          
           <Route path="/" element={
             <ProtectedRoute>
               <AdminLayout />
@@ -41,7 +41,8 @@ function App() {
               <Route path="Job_Master/job_title" element={<JobTitle />} />
               <Route path="Job_Master/skills" element={<Skills />} />
               <Route path="Admin/candidateList" element={<CandidateInfo />} />
-               <Route path="/Admin/clientList" element={< Clientlist />} />
+              <Route path="Admin/clientList" element={< Clientlist />} />
+              <Route path="edit-client/:id" element={<Edituser />} />
           </Route>
              <Route path="/Client" element={
               <ProtectedRoute>

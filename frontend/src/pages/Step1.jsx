@@ -97,10 +97,7 @@ useEffect(() => {
     try {
       setLoading(true);
       const res = await axios.get(`${Api_base_Url}/address/${value}`);
-      
       setSuggestions(res.data.suggestions || []);
-
-      // console.log('passcode',setPostcode);
     } catch (err) {
       console.error("Address lookup failed", err);
     } finally {

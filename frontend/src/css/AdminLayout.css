@@ -291,3 +291,20 @@
   body.dark-mode .btn-link:hover{
     color: #bdc3c7 !important;
   }
+
+  .main-footer{
+    top: auto !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 31px !important;
+    z-index: 1030 !important;
+    overflow: hidden !important;
+    transition: max-height 0.5s ease-in !important;
+    background-color: #f8faf8 !important;
+    box-shadow: none !important;
+    position: fixed !important;
+    width : calc(100% - 250px) !important;
+    border-top: 1px solid #d5d7d685 !important;
+    padding: 0.5rem 1rem !important;
+  }

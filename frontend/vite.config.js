@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
    optimizeDeps: {
-    include: ['jquery', 'admin-lte', 'bootstrap'],
+    include: ['admin-lte', 'bootstrap'],
   },
   build: {
     rollupOptions: {

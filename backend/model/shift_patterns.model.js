@@ -36,9 +36,35 @@ const shift_patterns = sequelize.define('shift_patterns', {
     sr: {
         type: DataTypes.INTEGER
     },
-    remark: {
+    remarks: {
         type: DataTypes.STRING
-    }
+    },
+    shift_start: {
+        type: DataTypes.STRING
+    },
+    shift_end: {
+        type: DataTypes.STRING
+    },
+
+    updated_by: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+
+    deleted_by: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+
+    updated_on: {
+        type: DataTypes.DATE,
+        allowNull: true
+    },
+
+    deleted_on: {
+        type: DataTypes.DATE,
+        allowNull: true
+    },
 
 },
 {

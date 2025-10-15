@@ -82,7 +82,7 @@ const Client = sequelize.define('client_register',{
     updated_on: DataTypes.DATE,
     updated_by: DataTypes.STRING,
     deleted_by: DataTypes.STRING,
-    deleted_on: DataTypes.STRING,
+    deleted_on: DataTypes.DATE,
 
     lan_number: DataTypes.STRING,
     lan_code: DataTypes.STRING,

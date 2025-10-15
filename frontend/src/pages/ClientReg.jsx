@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import useCandidateOptions from "../hooks/useCandidateOptions";
 import axios from "axios";
-import '../css/ClientReg.css'
 import showToast from "../helper/toast";
 import Step1 from "./components/Step1";
 import Step2 from "./components/Step2";
@@ -9,6 +8,7 @@ import Step3 from "./components/Step3";
 import Step4 from "./components/Step4";
 import Step5 from "./components/Step5";
 import LoaderScreen from "./components/Loader";
+import '../css/ClientReg.css'
 
 const ClientReg = () => {
 
@@ -85,8 +85,6 @@ const ClientReg = () => {
       job_title: jobTitleQuery.data || [],
     }
 
-    // console.log("Options:", options);
-
     const nextStep = () => setStep(step + 1);
     const prevStep = () => setStep(step - 1);
     // const goToStep = (targetStep) => setStep(targetStep)
@@ -134,6 +132,20 @@ const token = sessionStorage.getItem("token");
        if (response.status === 200 || response.status === 201) {
         showToast("success","Client Registered Successfully");
         successAudio.play();
+
+        try {
+              await axios.post(`${Api_base_Url}/mail/send`,{
+                to: values.email_id,
+                subject: "Application Received",
+                text: `Hi ${values.contact_name}, your application has been received.`,
+                candidate: values
+              })
+              // console.log("Confirmation email sent");
+
+            } catch (error) {
+              console.error(`Email send falied`,error.response.data || error)
+            }
+
         setFormData({
         candidate_id :"",
         client_organisation :"",

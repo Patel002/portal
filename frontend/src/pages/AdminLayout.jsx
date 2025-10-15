@@ -4,7 +4,6 @@ import '../css/AdminLayout.css';
 import logo from '/public/assets/logo-filled.png';
 import SidebarMenu from './Sidebar';
 import axios from "axios";
-// import 'admin-lte';
 
 const AdminLayout = () => {
 
@@ -102,16 +101,21 @@ const AdminLayout = () => {
             return () => clearInterval(interval);
         }, [role]);
         
-        useEffect(() => {
-            if (window.$ && window.$.fn && window.$.fn.Layout) {
-              window.$('[data-widget="pushmenu"]').PushMenu();
-              console.log("AdminLTE layout fully available.");
-            } else {
-              console.error("AdminLTE layout not fully available.");
-            }
-          }, []);
+       useEffect(() => {
+  import('admin-lte/dist/js/adminlte.min.js').then(() => {
+    // Initialize sidebar toggle or other widgets if needed
+    document.querySelectorAll('[data-lte-toggle="sidebar"]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const sidebar = document.querySelector('.main-sidebar');
+        sidebar?.classList.toggle('sidebar-open');
+      });
+    });
+    console.log('AdminLTE v4 loaded successfully');
+  });
+}, []);
+
           
-        console.log("LTE",window.$.fn.Layout);
+        // console.log("LTE",window.$.fn.Layout);
 
         const toggleCollapse = (event) => {
             event.preventDefault(); 
@@ -130,7 +134,7 @@ const AdminLayout = () => {
         <nav className="main-header navbar navbar-expand navbar-white navbar-light">
   <ul className="navbar-nav">
     <li className="nav-item">
-      <a className="nav-link" data-widget="pushmenu" href="#" role="button"><i className="fas fa-bars"></i></a>
+      <a className="nav-link" data-lte-toggle="sidebar" href="#" role="button"><i className="fas fa-bars"></i></a>
     </li>
     <li className="nav-item d-none d-sm-inline-block">
       <Link to="/dashboard" className="nav-link">Home</Link>
@@ -152,12 +156,12 @@ const AdminLayout = () => {
   </ul>
   <ul className="navbar-nav ml-auto">
     <li className="nav-item">
-        <a className="nav-link" data-widget="fullscreen" href="#" role="button">
+        <a className="nav-link" data-lte-toggle="fullscreen" href="#" role="button">
             <i className="fas fa-expand-arrows-alt"></i>
         </a>
     </li>
     <li className="nav-item dropdown">
-    <a className="nav-link" data-toggle="dropdown" href="#">
+    <a className="nav-link" data-bs-toggle="dropdown" href="#">
       <i className="fas fa-user-circle"></i>
     </a>
     <div className="dropdown-menu dropdown-menu-right">
@@ -196,7 +200,7 @@ const AdminLayout = () => {
                     </div> */}
 
                     <nav className="mt-1">
-                        <ul className="nav nav-pills nav-sidebar flex-column " data-widget="treeview" role="menu">
+                        <ul className="nav nav-pills nav-sidebar flex-column " data-lte-toggle="treeview" role="menu">
                         {role === "SUPER ADMIN" && (
                             <li className={`nav-item has-treeview ${isCollapsed ? "menu-open" : ""}`}>
                                 {/* <p className="nav-header mb-0 font-weight-bold
@@ -264,6 +268,9 @@ const AdminLayout = () => {
             </nav>
         </div>
     </aside>
+    <footer className="main-footer">
+        @2025 Nightingale Care
+    </footer>
 <Outlet />
 </div>
     );
